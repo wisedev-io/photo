@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <!-- head oval -->
+    <path android:strokeColor="#3DDC97" android:strokeWidth="4"
+        android:pathData="M54,30 m-15,0 a15,19 0 1,0 30,0 a15,19 0 1,0 -30,0" />
+    <!-- shoulders -->
+    <path android:strokeColor="#3DDC97" android:strokeWidth="4" android:strokeLineCap="round"
+        android:pathData="M30,84 C32,70 44,67 54,67 C64,67 76,70 78,84" />
+    <!-- eye line -->
+    <path android:strokeColor="#FFFFFF" android:strokeWidth="2.5" android:strokeLineCap="round"
+        android:pathData="M45,45 L63,45" />
+</vector>

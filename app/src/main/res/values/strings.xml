@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DV Photo</string>
+
+    <!-- Home -->
+    <string name="home_tagline">Photos that pass the DV Lottery rules.</string>
+    <string name="home_take">Take a photo</string>
+    <string name="home_take_sub">Guided camera with live checks and auto-capture</string>
+    <string name="home_upload">Check an existing photo</string>
+    <string name="home_upload_sub">We crop it for you and flag every problem</string>
+    <string name="home_rules">The rules we enforce</string>
+    <string name="rule_size">600–1200 px, square</string>
+    <string name="rule_file">JPEG, max 240 KB</string>
+    <string name="rule_head">Head 50–69% of height</string>
+    <string name="rule_bg">Plain white background</string>
+    <string name="home_recent">Saved photos</string>
+    <string name="home_privacy">Everything happens on your phone. Photos are never uploaded. Not affiliated with the U.S. government.</string>
+
+    <!-- Camera -->
+    <string name="before_title">Before you start</string>
+    <string name="before_1">Take off glasses, hats and headphones</string>
+    <string name="before_2">Stand in front of a plain white wall</string>
+    <string name="before_3">Face a window or lamp so light is even</string>
+    <string name="before_4">No filters, no beauty mode, no edits</string>
+    <string name="before_go">I\'m ready</string>
+    <string name="cam_perm_title">Camera access needed</string>
+    <string name="cam_perm_body">The camera is used only to guide and take your photo.</string>
+    <string name="cam_perm_button">Allow camera</string>
+    <string name="cam_flip">Flip</string>
+    <string name="cam_perfect">Perfect — hold still</string>
+    <string name="cam_looking">Looking for your face…</string>
+    <string name="cam_shutter_hint">Captures automatically when everything is green</string>
+    <string name="group_face">Face</string>
+    <string name="group_framing">Framing</string>
+    <string name="group_pose">Pose</string>
+    <string name="group_light">Light</string>
+    <string name="group_background">Background</string>
+
+    <!-- Result -->
+    <string name="busy">Checking your photo…</string>
+    <string name="result_ok">Ready for your DV entry</string>
+    <string name="result_bad">Needs attention</string>
+    <string name="result_bad_sub">Fix the red items and retake — or save anyway at your own risk.</string>
+    <string name="result_auto_crop">We auto-cropped your photo to the right size.</string>
+    <string name="result_upload_note">Make sure it was taken in the last 6 months and is unedited.</string>
+    <string name="result_specs">%1$d × %1$d px · %2$d KB · JPEG</string>
+    <string name="action_save">Save to gallery</string>
+    <string name="action_save_anyway">Save anyway</string>
+    <string name="action_share">Share</string>
+    <string name="action_retake">Retake</string>
+    <string name="action_pick_other">Pick another photo</string>
+    <string name="action_home">Done</string>
+    <string name="saved_ok">Saved to Pictures/DVPhoto</string>
+    <string name="err_capture">Couldn\'t take the photo. Try again.</string>
+    <string name="err_decode">Couldn\'t open that image.</string>
+    <string name="err_save">Couldn\'t save the photo.</string>
+
+    <!-- Check titles -->
+    <string name="check_face">One face</string>
+    <string name="check_head_size">Head size</string>
+    <string name="check_center">Centered</string>
+    <string name="check_eye_line">Eye line</string>
+    <string name="check_pose">Straight pose</string>
+    <string name="check_eyes_open">Eyes open</string>
+    <string name="check_expression">Expression</string>
+    <string name="check_lighting">Lighting</string>
+    <string name="check_background">Background</string>
+    <string name="check_sharpness">Sharpness</string>
+    <string name="check_resolution">Resolution</string>
+    <string name="check_file">File</string>
+
+    <!-- Hints (instructions) -->
+    <string name="hint_ok">Looks good</string>
+    <string name="hint_no_face">Show your face to the camera</string>
+    <string name="hint_multiple_faces">Only one person in the photo</string>
+    <string name="hint_move_closer">Move closer</string>
+    <string name="hint_move_back">Move back a little</string>
+    <string name="hint_move_left">Move left</string>
+    <string name="hint_move_right">Move right</string>
+    <string name="hint_eyes_low">Tilt the phone down a little</string>
+    <string name="hint_eyes_high">Tilt the phone up a little</string>
+    <string name="hint_tilt_head">Keep your head level</string>
+    <string name="hint_turned">Look straight at the camera</string>
+    <string name="hint_chin_level">Keep your chin level</string>
+    <string name="hint_eyes_closed">Open your eyes</string>
+    <string name="hint_smiling">Relax — neutral expression</string>
+    <string name="hint_too_dark">Too dark — face a light</string>
+    <string name="hint_too_bright">Too bright — avoid direct glare</string>
+    <string name="hint_uneven_light">Shadow on your face — even out the light</string>
+    <string name="hint_not_light">Background must be white or off-white</string>
+    <string name="hint_not_plain">Background must be plain, no patterns</string>
+    <string name="hint_not_neutral">Background is tinted — use a white wall</string>
+    <string name="hint_blurry">Photo is blurry — hold still</string>
+    <string name="hint_low_res">Resolution too low (min 600 px)</string>
+    <string name="hint_file_too_large">File is over 240 KB</string>
+    <string name="hint_file_size_range">Size must be 600–1200 px</string>
+</resources>
