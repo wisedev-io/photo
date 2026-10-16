@@ -103,5 +103,11 @@ What each layer proves — and what it does not:
 
 ## Privacy
 
-No network permission is requested. Photos are processed on the device and written only where you choose. The only
-permissions are `CAMERA` and, on Android 9 and older, `WRITE_EXTERNAL_STORAGE` (to save into Pictures/Download).
+* Photos are processed on the device and written only where you choose. The app contains no networking code,
+  no account, no analytics and no ads.
+* The app's own manifest requests only `CAMERA` and, on Android 9 and older, `WRITE_EXTERNAL_STORAGE`
+  (to save into Pictures/Download).
+* Third-party libraries (notably Google's ML Kit) can merge extra permissions such as `INTERNET` into the final
+  manifest for their own anonymous usage statistics. This has **not** been checked here (no Android build was possible);
+  inspect *Merged Manifest* in Android Studio, and if you want a hard guarantee, test removing it with
+  `tools:node="remove"` on a real device before shipping — ML Kit's bundled face model itself works offline.
