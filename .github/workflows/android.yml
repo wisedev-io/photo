@@ -44,7 +44,12 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      - uses: android-actions/setup-android@v3
+      # The runner image already contains the Android SDK. android-actions/setup-android@v3 fails on it
+      # ("Failed to find package 'tools'"), so only accept the licenses and let Gradle fetch what is missing.
+      - name: Accept Android SDK licenses
+        run: |
+          SDKMANAGER="$(command -v sdkmanager || ls "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager | tail -n 1)"
+          yes | "$SDKMANAGER" --licenses > /dev/null || true
       - uses: gradle/actions/setup-gradle@v4
       - name: Unit tests + debug APK
         run: ./gradlew :core:test :app:assembleDebug
