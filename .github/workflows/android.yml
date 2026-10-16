@@ -56,6 +56,22 @@ jobs:
       - name: Android lint
         run: ./gradlew :app:lintDebug
         continue-on-error: true
+      - name: Lint findings (text)
+        if: always()
+        run: cat app/build/intermediates/lint_intermediate_text_report/debug/lintReportDebug/lint-results-debug.txt || true
+      - name: Permissions in the merged manifest (what the installed app can ask for)
+        if: always()
+        run: |
+          for f in $(find app/build/intermediates -path '*merged_manifest*' -name AndroidManifest.xml); do
+            echo "== $f"
+            grep -E 'uses-permission|uses-feature' "$f" || true
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lint-report
+          path: app/build/reports/lint-results-debug.html
+          if-no-files-found: ignore
       - uses: actions/upload-artifact@v4
         with:
           name: dv-photo-debug-apk
