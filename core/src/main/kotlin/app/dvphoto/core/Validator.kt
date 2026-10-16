@@ -18,9 +18,9 @@ object Validator {
 
         val m = DvRules.MARGIN
         when {
-            r.headHeight < DvRules.HEAD_MIN + m -> fail(CheckId.HEAD_SIZE, Hint.MOVE_CLOSER)
-            r.headHeight > DvRules.HEAD_MAX - m -> fail(CheckId.HEAD_SIZE, Hint.MOVE_BACK)
-            else -> pass(CheckId.HEAD_SIZE)
+            r.headHeight < DvRules.HEAD_MIN + m -> out.add(Check(CheckId.HEAD_SIZE, Status.FAIL, Hint.MOVE_CLOSER, r.headHeight))
+            r.headHeight > DvRules.HEAD_MAX - m -> out.add(Check(CheckId.HEAD_SIZE, Status.FAIL, Hint.MOVE_BACK, r.headHeight))
+            else -> out.add(Check(CheckId.HEAD_SIZE, Status.PASS, Hint.OK, r.headHeight))
         }
 
         val off = r.centerX - 0.5f
@@ -32,9 +32,9 @@ object Validator {
         }
 
         when {
-            r.eyeFromBottom < DvRules.EYE_MIN + m -> fail(CheckId.EYE_LINE, Hint.EYES_LOW)
-            r.eyeFromBottom > DvRules.EYE_MAX - m -> fail(CheckId.EYE_LINE, Hint.EYES_HIGH)
-            else -> pass(CheckId.EYE_LINE)
+            r.eyeFromBottom < DvRules.EYE_MIN + m -> out.add(Check(CheckId.EYE_LINE, Status.FAIL, Hint.EYES_LOW, r.eyeFromBottom))
+            r.eyeFromBottom > DvRules.EYE_MAX - m -> out.add(Check(CheckId.EYE_LINE, Status.FAIL, Hint.EYES_HIGH, r.eyeFromBottom))
+            else -> out.add(Check(CheckId.EYE_LINE, Status.PASS, Hint.OK, r.eyeFromBottom))
         }
 
         when {
@@ -60,7 +60,7 @@ object Validator {
             }
             when {
                 s.bgLuma < DvRules.BG_LUMA_MIN -> fail(CheckId.BACKGROUND, Hint.NOT_LIGHT)
-                s.bgStd > DvRules.BG_STD_MAX -> fail(CheckId.BACKGROUND, Hint.NOT_PLAIN)
+                s.bgStd > DvRules.BG_STD_MAX || s.bgOutliers > DvRules.BG_OUTLIER_MAX || s.bgEdges > DvRules.BG_EDGE_MAX -> fail(CheckId.BACKGROUND, Hint.NOT_PLAIN)
                 s.bgChroma != null && s.bgChroma > DvRules.BG_CHROMA_MAX -> fail(CheckId.BACKGROUND, Hint.NOT_NEUTRAL)
                 else -> pass(CheckId.BACKGROUND)
             }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 7.x: no adaptive icons yet, so layer the same artwork on the dark background. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/ink" />
+    <item android:drawable="@drawable/ic_launcher_foreground" />
+</layer-list>

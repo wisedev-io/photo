@@ -16,6 +16,7 @@ object Pal {
     val Indigo = Color(0xFF6C7BFF)
     val Text = Color(0xFFF2F5F9)
     val Muted = Color(0xFF8C97A6)
+    val Hairline = Color(0x14FFFFFF)
 }
 
 @Composable

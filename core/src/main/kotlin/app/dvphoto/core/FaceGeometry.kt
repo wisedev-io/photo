@@ -38,3 +38,30 @@ object FaceGeometry {
             smile = f.smile,
         )
 }
+
+/** Integer rectangle in pixel space (right/bottom exclusive). */
+data class PxRect(val left: Int, val top: Int, val right: Int, val bottom: Int) {
+    val width: Int get() = right - left
+    val height: Int get() = bottom - top
+}
+
+object FrameGeometry {
+    /**
+     * Rotates [r], given in the coordinates of a raw sensor buffer of [w] x [h] pixels, into the coordinates of
+     * the upright image obtained by rotating that buffer clockwise by [rotationDegrees].
+     */
+    fun rotateRect(r: PxRect, w: Int, h: Int, rotationDegrees: Int): PxRect = when (((rotationDegrees % 360) + 360) % 360) {
+        90 -> PxRect(h - r.bottom, r.left, h - r.top, r.right)
+        180 -> PxRect(w - r.right, h - r.bottom, w - r.left, h - r.top)
+        270 -> PxRect(r.top, w - r.right, r.bottom, w - r.left)
+        else -> r
+    }
+
+    /** Largest centred square inside [r]. */
+    fun centeredSquare(r: PxRect): PxRect {
+        val s = minOf(r.width, r.height)
+        val l = r.left + (r.width - s) / 2
+        val t = r.top + (r.height - s) / 2
+        return PxRect(l, t, l + s, t + s)
+    }
+}

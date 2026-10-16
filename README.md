@@ -1,58 +1,100 @@
 # DV Photo Camera
 
 Android app (Kotlin, Jetpack Compose, CameraX, ML Kit) that helps you take or check a photo for the
-**U.S. Diversity Visa (DV) Lottery** and refuses to call it "ready" unless it meets the rules.
+**U.S. Diversity Visa (DV) Lottery** — and refuses to call it "ready" unless it meets the rules.
 
-Everything runs on the device. No account, no upload, no backend. Not affiliated with the U.S. government.
+Everything runs on the phone. No account, no upload, no backend. Not affiliated with the U.S. government.
 
 ## What it does
 
-- **Guided camera** - a square viewfinder with on-screen shapes: target head oval, shoulder guide,
-  allowed eye-line band and centre ticks. Your detected head is drawn in white; line it up with the
-  coloured target.
-- **Plain-language instructions** - one instruction at a time ("Move closer", "Look straight at the
-  camera", "Shadow on your face"), plus five status chips (Face, Framing, Pose, Light, Background).
-- **Auto-capture** - fires after everything has been green and steady for 1.2 s. Manual shutter too.
-- **Upload & check** - pick any photo; it is auto-cropped around the face to the ideal framing and every
-  rule is reported. Bad photos get a red verdict and a retake prompt ("Save anyway" is a quiet, explicit option).
-- **Exports a compliant file** - square, 600-1200 px, JPEG <= 240 KB (quality is searched to fit),
-  metadata-free, saved to `Pictures/DVPhoto`.
-- **History** - saved photos are recorded in a local Room database (`dvphoto.db`) and shown on the home screen.
+| | |
+|---|---|
+| **Guided camera** | Square viewfinder with on-screen shapes: target head oval, shoulder guide, allowed eye-line band, centre ticks. Your detected head is drawn in white — line it up with the coloured target. |
+| **One instruction at a time** | "Move closer", "Look straight at the camera", "Shadow on your face"… plus five status chips. Optional spoken guidance. |
+| **Auto-capture** | Fires after everything has been green and steady for 1.2 s (or tap the button). Exposure and focus are metered on your face, so a bright white wall doesn't darken it. |
+| **No filters — enforced** | See [below](#no-filters-no-ai). |
+| **Check an existing photo** | Pick any picture: it is auto-cropped around the face, every rule is reported, and the file's metadata is searched for AI / filter / editing marks and its age. |
+| **Name & save, directly** | A photo that passes goes straight to a *Name & save* screen: pick who it is for (applicant, spouse, child 1–4), rename the file, choose Gallery or Downloads, save. Duplicate names get " (1)". Or "Choose another location…" with the system file picker. |
+| **Family friendly** | The name field suggests the first role you haven't saved yet (`DV_Applicant.jpg`, `DV_Spouse.jpg`, `DV_Child1.jpg`…). |
+| **9 languages** | English, Русский, Oʻzbekcha, Español, Français, Português, Türkçe, العربية (RTL), বাংলা — switch in Settings. |
+| **Works on old and new phones** | Android 7.0 (API 24) → 15. Tablets/foldables get a centred, width-capped layout. No camera? You can still check photos. Phones that cannot run three camera streams at once fall back to manual shutter. |
 
-## Rules enforced (see `core/.../DvRules.kt`)
+### No filters, no AI
+
+The State Department wants an unedited photo. This app never edits pixels — it only **crops and resizes**.
+
+* **Camera**: CameraX is used *without* Extensions (the OEM HDR / Night / Bokeh / Face-Retouch / "Auto" modes). Every
+  use case also pins Camera2 `CONTROL_EFFECT_MODE = OFF` and `CONTROL_SCENE_MODE = DISABLED` under plain `AUTO`
+  control, flash is off, and the output is a standard SDR JPEG (never Ultra HDR). The result is re-drawn into a fresh
+  sRGB bitmap, so colour profiles, HDR gain maps and all metadata are dropped.
+* **Uploads** are scanned (metadata only, never pixel data) for: IPTC `DigitalSourceType` AI values, C2PA Content
+  Credentials that record filter / edit actions, names of AI tools and beauty / filter apps in the software tags
+  (BeautyPlus, Meitu, FaceApp, Facetune, Instagram, Midjourney, Firefly, "Galaxy AI", "Magic Editor", …), portrait/depth
+  mode, general editors (Photoshop, Lightroom, Snapseed… → warning) and the **date taken** (must be within 6 months).
+* What cannot be detected from a file: retouching done and saved by an app that writes no marks. The app says so.
+
+## Rules enforced (`core/…/DvRules.kt`)
 
 | Rule | Value |
 |---|---|
-| Image | square, 600-1200 px, JPEG, <= 240 KB |
-| Head height | 50-69% of image height (we insist on 52-67%) |
-| Eye line | 56-69% from the bottom (we insist on 58-67%) |
-| Pose | roll <= 5 deg, yaw <= 8 deg, pitch <= 10 deg, eyes open, neutral expression |
-| Light | face not too dark/bright, left/right balance (no half-face shadows) |
-| Background | light (>= 170/255), uniform, neutral colour |
-| Sharpness | Laplacian-variance check on the face |
+| Image | square, 600–1200 px, JPEG, ≤ 240 KB (quality, then size, is reduced to fit) |
+| Head height | 50–69 % of image height (we insist on 52–67 %), measured to the top of the hair |
+| Eye line | 56–69 % from the bottom (we insist on 58–67 %) |
+| Pose | roll ≤ 5°, yaw ≤ 8°, pitch ≤ 10°, eyes open, neutral expression (smile = warning) |
+| Light | face neither too dark nor too bright; no half-face shadow |
+| Background | light (≥ 170/255), plain: lighting gradients are fine, patterns / shadows / edges / posters are not; neutral colour |
+| Sharpness | Laplacian-variance on the face |
+| Editing | no AI / beauty-app marks; photo date ≤ 6 months old |
 
-**Verify these against the current State Department instructions before each registration period.**
-All thresholds live in one file so a rule change is a one-file edit.
+**Always verify these numbers against the current State Department instructions before each registration
+period.** All thresholds live in one file. Head-top is measured on the pixels (walking up from the forehead until the
+plain wall starts); when that is impossible (white hair on a white wall) it falls back to an estimate from the
+face contour — *Settings → Show measurements* shows the live numbers (`m` = measured, `e` = estimated) so you can
+calibrate on a few real faces.
 
-Known limits: glasses/hats/filters/age of photo cannot be detected - the app asks the user up-front
-instead. Head-top is estimated from the face contour (ML Kit gives no hair line), so the head-size check is
-approximate and deliberately uses a margin inside the official band. Tune thresholds on real devices.
+Not detectable: glasses, hats / head coverings. The app asks up front and lists them in Help.
 
 ## Architecture
 
 ```
-core/   pure Kotlin (no Android): rules, validator, scene maths, smart crop  <- unit tested on the JVM
-app/    Android: CameraX + ML Kit (LiveAnalyzer), Compose UI, Room, JPEG exporter
+core/      pure Kotlin, no Android: rules, validator, scene maths, head-top finder, smart crop,
+           EXIF/XMP/C2PA metadata scanner, provenance checks, file naming          (JVM unit tests)
+app/       Android app
+  ui/        pure Compose screens + state holders (no Android imports)      (rendered headlessly by harness/)
+  host/      the Android-only Compose glue: pickers, permissions, camera preview, intents
+  platform/  CameraX session, ML Kit, imaging/export, MediaStore storage, prefs, locale, TTS
+  data/      Room database of saved photos
+harness/   headless Compose Desktop project: compiles core + ui, renders every screen in every language to PNG
+tools/     check-android.sh (compile Android code against stubs), check_resources.py (+ its tests)
 ```
 
-Memory: live analysis reads only the camera's Y plane at ~6 fps (no per-frame bitmaps), uploads are
-decoded down to 2000 px, a single JPEG is held at a time. Min SDK 29.
+Memory: live analysis reads only the camera's Y plane at ~6 fps (no per-frame bitmaps); uploads are decoded down to
+2000 px; one JPEG (≤ 240 KB) is kept per result.
 
-## Build
+## Build & test
 
 ```
-gradle :core:test          # rules engine tests (JVM)
-gradle :app:assembleDebug  # needs the Android SDK
+./gradlew :core:test :app:assembleDebug        # needs the Android SDK (CI job "android")
+
+# no Android SDK needed:
+python3 tools/check_resources.py               # keys, placeholders, locales
+python3 tools/test_check_resources.py          # tests of the checker
+./gradlew -p core test                         # rules engine (JVM)
+./gradlew -p harness desktopTest               # compile + render screens → harness/build/screenshots/*.png
+tools/check-android.sh                         # compile host/platform/ViewModel against the real android.jar + stubs
 ```
 
-Open the folder in Android Studio (Ladybug or newer). CI is in `.github/workflows/android.yml`.
+What each layer proves — and what it does not:
+
+* `core` tests exercise every rule, the metadata parser (with synthetic JPEGs), file naming, the head-top finder
+  on rendered synthetic portraits, background analysis (gradients vs. shadows, posters, grain).
+* `harness` compiles the real UI sources and renders them (Compose Multiplatform 1.5 / Skia) in 9 languages,
+  including RTL, so overflow and clipping are caught.
+* `check-android.sh` type-checks the Android code against the real `android.jar` and hand-written stubs of CameraX,
+  ML Kit, Room, lifecycle and activity-compose. A stub is only as accurate as its author — **the Android build and a
+  device remain the judges**. Nothing here has been run on a phone yet.
+
+## Privacy
+
+No network permission is requested. Photos are processed on the device and written only where you choose. The only
+permissions are `CAMERA` and, on Android 9 and older, `WRITE_EXTERNAL_STORAGE` (to save into Pictures/Download).

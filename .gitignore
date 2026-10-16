@@ -9,3 +9,5 @@ captures/
 *.apk
 *.aab
 .DS_Store
+.kotlin/
+*.hprof

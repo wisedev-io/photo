@@ -11,15 +11,18 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import kotlinx.coroutines.flow.Flow
 
-/** One saved, exported photo. The image itself lives in the gallery (Pictures/DVPhoto). */
+/** One saved, exported photo. The image itself lives in the gallery or Downloads. */
 @Entity(tableName = "photos")
 data class PhotoRecord(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val uri: String,
+    val name: String,
     val createdAt: Long,
     val sizeBytes: Int,
     val sidePx: Int,
     val source: String,
+    val role: String,
+    val folder: String,
     val passed: Boolean,
 )
 
@@ -28,6 +31,9 @@ interface PhotoDao {
     @Query("SELECT * FROM photos ORDER BY createdAt DESC LIMIT 12")
     fun recent(): Flow<List<PhotoRecord>>
 
+    @Query("SELECT * FROM photos WHERE id = :id")
+    suspend fun byId(id: Long): PhotoRecord?
+
     @Insert
     suspend fun insert(record: PhotoRecord): Long
 
@@ -35,7 +41,7 @@ interface PhotoDao {
     suspend fun delete(id: Long)
 }
 
-@Database(entities = [PhotoRecord::class], version = 1, exportSchema = false)
+@Database(entities = [PhotoRecord::class], version = 2, exportSchema = false)
 abstract class AppDb : RoomDatabase() {
     abstract fun photos(): PhotoDao
 
@@ -44,6 +50,7 @@ abstract class AppDb : RoomDatabase() {
 
         fun get(context: Context): AppDb = instance ?: synchronized(this) {
             instance ?: Room.databaseBuilder(context.applicationContext, AppDb::class.java, "dvphoto.db")
+                .fallbackToDestructiveMigration()
                 .build().also { instance = it }
         }
     }

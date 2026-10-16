@@ -25,6 +25,25 @@ object SmartCrop {
         return SquareCrop(left.roundToInt(), top.roundToInt(), side.roundToInt(), clamped)
     }
 
+    /**
+     * Second pass: given the [reading] measured inside [crop], recomputes the square using the measured
+     * head height (hair included) and eye line so the final framing is right even when the first
+     * estimate of the head top was off.
+     */
+    fun refine(crop: SquareCrop, r: FaceReading, imgW: Int, imgH: Int): SquareCrop {
+        val headPx = r.headHeight * crop.side
+        val eyePx = crop.top + r.eyeY * crop.side
+        val cxPx = crop.left + r.centerX * crop.side
+        val ideal = headPx / DvRules.HEAD_TARGET
+        val side = min(ideal, min(imgW, imgH).toFloat())
+        val left = cxPx - side / 2f
+        val top = eyePx - (1f - DvRules.EYE_TARGET) * side
+        val cl = left.coerceIn(0f, imgW - side)
+        val ct = top.coerceIn(0f, imgH - side)
+        val clamped = side < ideal - 1f || abs(cl - left) > 1f || abs(ct - top) > 1f
+        return SquareCrop(cl.roundToInt(), ct.roundToInt(), side.roundToInt(), clamped)
+    }
+
     fun centered(imgW: Int, imgH: Int): SquareCrop {
         val s = min(imgW, imgH)
         return SquareCrop((imgW - s) / 2, (imgH - s) / 2, s, false)

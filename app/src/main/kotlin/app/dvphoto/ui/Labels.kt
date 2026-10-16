@@ -1,9 +1,15 @@
 package app.dvphoto.ui
 
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import app.dvphoto.R
+import app.dvphoto.core.Check
 import app.dvphoto.core.CheckId
 import app.dvphoto.core.Hint
+import app.dvphoto.core.Status
+import kotlin.math.roundToInt
 
 @StringRes
 fun Hint.res(): Int = when (this) {
@@ -29,6 +35,14 @@ fun Hint.res(): Int = when (this) {
     Hint.NOT_NEUTRAL -> R.string.hint_not_neutral
     Hint.BLURRY -> R.string.hint_blurry
     Hint.LOW_RES -> R.string.hint_low_res
+    Hint.EDIT_AI -> R.string.hint_edit_ai
+    Hint.EDIT_APP -> R.string.hint_edit_app
+    Hint.EDIT_CREDENTIALS -> R.string.hint_edit_credentials
+    Hint.EDIT_PORTRAIT -> R.string.hint_edit_portrait
+    Hint.EDIT_SOFTWARE -> R.string.hint_edit_software
+    Hint.AGE_OLD -> R.string.hint_age_old
+    Hint.AGE_UNKNOWN -> R.string.hint_age_unknown
+    Hint.AGE_FUTURE -> R.string.hint_age_future
     Hint.FILE_TOO_LARGE -> R.string.hint_file_too_large
     Hint.FILE_SIZE_RANGE -> R.string.hint_file_size_range
 }
@@ -46,7 +60,27 @@ fun CheckId.res(): Int = when (this) {
     CheckId.BACKGROUND -> R.string.check_background
     CheckId.SHARPNESS -> R.string.check_sharpness
     CheckId.RESOLUTION -> R.string.check_resolution
+    CheckId.EDITING -> R.string.check_editing
+    CheckId.PHOTO_AGE -> R.string.check_photo_age
     CheckId.FILE -> R.string.check_file
+}
+
+/** Instruction / explanation text of a check; the age hint carries the number of months. */
+@Composable
+fun Check.hintText(): String =
+    if (hint == Hint.AGE_OLD) stringResource(R.string.hint_age_old, (value ?: 0f).roundToInt())
+    else stringResource(hint.res())
+
+/** Short measurement shown next to a check, e.g. "58%" for the head size; null when there is nothing to show. */
+fun Check.valueText(): String? = when (id) {
+    CheckId.HEAD_SIZE, CheckId.EYE_LINE -> value?.let { "${(it * 100).roundToInt()}%" }
+    else -> null
+}
+
+fun Status.color(): Color = when (this) {
+    Status.PASS -> Pal.Mint
+    Status.WARN -> Pal.Amber
+    Status.FAIL -> Pal.Coral
 }
 
 /** The five chips shown under the viewfinder. */

@@ -125,7 +125,7 @@ class CoreTest {
 
     @Test fun sceneAnalyzerSeesWhiteWallAndFace() {
         val src = Synthetic { x, y -> if (x in 350..650 && y in 120..690) 130 else 230 }
-        val s = SceneAnalyzer.analyze(src, 0, 0, 1000, good(), withSharpness = false)
+        val s = SceneAnalyzer.analyze(src, 0, 0, 1000, good(), withSharpness = false).stats
         assertEquals(130f, s.faceLuma, 1f)
         assertEquals(0f, s.lightAsymmetry, 0.01f)
         assertEquals(230f, s.bgLuma, 2f)
@@ -136,7 +136,7 @@ class CoreTest {
 
     @Test fun sceneAnalyzerFlagsBusyBackgroundAndShadow() {
         val busy = Synthetic { x, y -> if (x in 350..650 && y in 120..690) { if (x < 500) 60 else 160 } else if ((x / 40 + y / 40) % 2 == 0) 80 else 240 }
-        val s = SceneAnalyzer.analyze(busy, 0, 0, 1000, good(), withSharpness = false)
+        val s = SceneAnalyzer.analyze(busy, 0, 0, 1000, good(), withSharpness = false).stats
         assertTrue("asym ${s.lightAsymmetry}", s.lightAsymmetry > DvRules.MAX_LIGHT_ASYMMETRY)
         assertTrue("bg std ${s.bgStd}", s.bgStd > DvRules.BG_STD_MAX)
         assertNotNull(Validator.firstProblem(Validator.validate(good(), s, 1000, false)))
@@ -145,8 +145,8 @@ class CoreTest {
     @Test fun sharpnessSeparatesCrispFromFlat() {
         val crisp = Synthetic { x, y -> if ((x / 6 + y / 6) % 2 == 0) 60 else 200 }
         val flat = Synthetic { _, _ -> 128 }
-        val sc = SceneAnalyzer.analyze(crisp, 0, 0, 1000, good(), true).sharpness!!
-        val sf = SceneAnalyzer.analyze(flat, 0, 0, 1000, good(), true).sharpness!!
+        val sc = SceneAnalyzer.analyze(crisp, 0, 0, 1000, good(), true).stats.sharpness!!
+        val sf = SceneAnalyzer.analyze(flat, 0, 0, 1000, good(), true).stats.sharpness!!
         assertTrue("crisp $sc", sc > DvRules.MIN_SHARPNESS)
         assertTrue("flat $sf", sf < DvRules.MIN_SHARPNESS)
     }

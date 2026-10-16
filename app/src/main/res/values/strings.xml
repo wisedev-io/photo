@@ -2,58 +2,118 @@
 <resources>
     <string name="app_name">DV Photo</string>
 
+    <!-- Common actions -->
+    <string name="action_back">Back</string>
+    <string name="action_close">Close</string>
+    <string name="action_clear">Clear</string>
+    <string name="action_home">Done</string>
+    <string name="action_open">Open photo</string>
+    <string name="action_share">Share</string>
+    <string name="action_save">Save to phone</string>
+    <string name="action_saving">Saving…</string>
+    <string name="action_save_as">Choose another location…</string>
+    <string name="action_save_anyway">Save anyway</string>
+    <string name="action_retake">Retake photo</string>
+    <string name="action_pick_other">Pick another photo</string>
+    <string name="action_another">Add another photo</string>
+
     <!-- Home -->
     <string name="home_tagline">Photos that pass the DV Lottery rules.</string>
     <string name="home_take">Take a photo</string>
-    <string name="home_take_sub">Guided camera with live checks and auto-capture</string>
+    <string name="home_take_sub">Live guidance, auto-capture, no filters</string>
     <string name="home_upload">Check an existing photo</string>
     <string name="home_upload_sub">We crop it for you and flag every problem</string>
+    <string name="home_step1">Take or pick</string>
+    <string name="home_step2">Auto-check</string>
+    <string name="home_step3">Name &amp; save</string>
     <string name="home_rules">The rules we enforce</string>
     <string name="rule_size">600–1200 px, square</string>
     <string name="rule_file">JPEG, max 240 KB</string>
-    <string name="rule_head">Head 50–69% of height</string>
+    <string name="rule_head">Head %1$d–%2$d%% of height</string>
     <string name="rule_bg">Plain white background</string>
+    <string name="rule_nofilters">No filters, no AI edits</string>
+    <string name="rule_recent">Taken in the last 6 months</string>
     <string name="home_recent">Saved photos</string>
     <string name="home_privacy">Everything happens on your phone. Photos are never uploaded. Not affiliated with the U.S. government.</string>
 
     <!-- Camera -->
-    <string name="before_title">Before you start</string>
-    <string name="before_1">Take off glasses, hats and headphones</string>
-    <string name="before_2">Stand in front of a plain white wall</string>
-    <string name="before_3">Face a window or lamp so light is even</string>
-    <string name="before_4">No filters, no beauty mode, no edits</string>
-    <string name="before_go">I\'m ready</string>
-    <string name="cam_perm_title">Camera access needed</string>
-    <string name="cam_perm_body">The camera is used only to guide and take your photo.</string>
-    <string name="cam_perm_button">Allow camera</string>
     <string name="cam_flip">Flip</string>
-    <string name="cam_perfect">Perfect — hold still</string>
+    <string name="cam_shutter">Take photo</string>
+    <string name="cam_nofilters">No filters</string>
     <string name="cam_looking">Looking for your face…</string>
-    <string name="cam_shutter_hint">Captures automatically when everything is green</string>
+    <string name="cam_perfect">Perfect — hold still</string>
+    <string name="cam_hint_auto">Captures automatically when everything is green</string>
+    <string name="cam_hint_manual">Tap the button when everything is green</string>
     <string name="group_face">Face</string>
     <string name="group_framing">Framing</string>
     <string name="group_pose">Pose</string>
     <string name="group_light">Light</string>
-    <string name="group_background">Background</string>
-
-    <!-- Result -->
+    <string name="group_background">Backdrop</string>
+    <string name="before_title">Before you start</string>
+    <string name="before_1">Take off glasses, hats and headphones</string>
+    <string name="before_2">Stand in front of a plain white wall</string>
+    <string name="before_3">Face a window or lamp so the light is even</string>
+    <string name="before_4">Turn off beauty mode and filters in other apps</string>
+    <string name="before_go">I’m ready</string>
+    <string name="perm_title">Camera access needed</string>
+    <string name="perm_body">The camera is only used to guide and take your photo. Nothing leaves your phone.</string>
+    <string name="perm_allow">Allow camera</string>
+    <string name="perm_settings">Open app settings</string>
+    <string name="nocam_title">No camera found</string>
+    <string name="nocam_body">This device has no usable camera. You can still check a photo you already have.</string>
+    <string name="nocam_upload">Check an existing photo</string>
+    <string name="cam_manual_only">Live guidance isn’t available on this phone. Line your face up with the shapes and tap the button.</string>
     <string name="busy">Checking your photo…</string>
-    <string name="result_ok">Ready for your DV entry</string>
+
+    <!-- Result (photo with problems) -->
+    <string name="result_title">Photo check</string>
     <string name="result_bad">Needs attention</string>
-    <string name="result_bad_sub">Fix the red items and retake — or save anyway at your own risk.</string>
-    <string name="result_auto_crop">We auto-cropped your photo to the right size.</string>
-    <string name="result_upload_note">Make sure it was taken in the last 6 months and is unedited.</string>
+    <string name="result_bad_sub">Fix the red items and try again. You can still save it, but it may be rejected.</string>
+    <string name="result_counts">Problems: %1$d · Warnings: %2$d</string>
+    <string name="result_auto_crop">We auto-cropped your photo to the right framing.</string>
+    <string name="result_upload_note">We can’t see glasses, head coverings or retouching inside the pixels. Make sure the photo is recent and unedited.</string>
+    <string name="result_risk">Saving a photo with problems is at your own risk — the State Department may reject it.</string>
     <string name="result_specs">%1$d × %1$d px · %2$d KB · JPEG</string>
-    <string name="action_save">Save to gallery</string>
-    <string name="action_save_anyway">Save anyway</string>
-    <string name="action_share">Share</string>
-    <string name="action_retake">Retake</string>
-    <string name="action_pick_other">Pick another photo</string>
-    <string name="action_home">Done</string>
-    <string name="saved_ok">Saved to Pictures/DVPhoto</string>
-    <string name="err_capture">Couldn\'t take the photo. Try again.</string>
-    <string name="err_decode">Couldn\'t open that image.</string>
-    <string name="err_save">Couldn\'t save the photo.</string>
+
+    <!-- Name and save -->
+    <string name="name_title">Name &amp; save</string>
+    <string name="name_all_ok">All checks passed</string>
+    <string name="name_preview_desc">Your photo</string>
+    <string name="name_for">Who is this photo for?</string>
+    <string name="name_file">File name</string>
+    <string name="name_will_be">Will be saved as %1$s</string>
+    <string name="name_where">Save to</string>
+    <string name="name_checks">Photo checks · %1$d of %2$d passed</string>
+    <string name="name_ascii_tip">Tip: English letters and numbers are the safest for the DV website.</string>
+    <string name="name_ascii_fix">Use English letters</string>
+    <string name="role_applicant">Applicant</string>
+    <string name="role_spouse">Spouse</string>
+    <string name="role_child1">Child 1</string>
+    <string name="role_child2">Child 2</string>
+    <string name="role_child3">Child 3</string>
+    <string name="role_child4">Child 4</string>
+    <string name="role_other">Other</string>
+    <string name="folder_gallery">Gallery</string>
+    <string name="folder_downloads">Downloads</string>
+    <string name="folder_gallery_path">Pictures/DVPhoto — shows up in your Gallery</string>
+    <string name="folder_downloads_path">Download/DVPhoto — easy to find in Files</string>
+
+    <string name="discard_title">Discard this photo?</string>
+    <string name="discard_body">You haven’t saved it yet. If you leave now it will be deleted.</string>
+    <string name="discard_yes">Discard</string>
+    <string name="discard_no">Keep editing</string>
+
+    <!-- Saved -->
+    <string name="saved_title">Saved to your phone</string>
+    <string name="saved_size">%1$d KB</string>
+    <string name="saved_custom">The location you chose</string>
+    <string name="saved_tip">Upload this file on the DV entry website. Every family member needs their own photo.</string>
+    <string name="err_capture">Couldn’t take the photo. Please try again.</string>
+    <string name="err_decode">Couldn’t open that image.</string>
+    <string name="err_save">Couldn’t save the photo.</string>
+    <string name="err_storage_permission">Storage permission is needed to save on this phone.</string>
+    <string name="err_open">No app found to open this.</string>
+    <string name="err_missing">That photo is no longer on your phone.</string>
 
     <!-- Check titles -->
     <string name="check_face">One face</string>
@@ -67,9 +127,11 @@
     <string name="check_background">Background</string>
     <string name="check_sharpness">Sharpness</string>
     <string name="check_resolution">Resolution</string>
+    <string name="check_editing">No filters or edits</string>
+    <string name="check_photo_age">Photo age</string>
     <string name="check_file">File</string>
 
-    <!-- Hints (instructions) -->
+    <!-- Hints (also spoken aloud) -->
     <string name="hint_ok">Looks good</string>
     <string name="hint_no_face">Show your face to the camera</string>
     <string name="hint_multiple_faces">Only one person in the photo</string>
@@ -89,9 +151,63 @@
     <string name="hint_uneven_light">Shadow on your face — even out the light</string>
     <string name="hint_not_light">Background must be white or off-white</string>
     <string name="hint_not_plain">Background must be plain, no patterns</string>
-    <string name="hint_not_neutral">Background is tinted — use a white wall</string>
+    <string name="hint_not_neutral">Background looks tinted — use a white wall and daylight</string>
     <string name="hint_blurry">Photo is blurry — hold still</string>
     <string name="hint_low_res">Resolution too low (min 600 px)</string>
+    <string name="hint_edit_ai">Looks AI-generated or AI-edited — not allowed</string>
+    <string name="hint_edit_app">Made with a beauty or filter app — not allowed</string>
+    <string name="hint_edit_credentials">File records edits or filters — use the untouched photo</string>
+    <string name="hint_edit_portrait">Portrait mode smooths and blurs — use the normal camera</string>
+    <string name="hint_edit_software">Edited in photo software — use the original photo</string>
+    <string name="hint_age_old">Taken about %1$d months ago — must be within the last 6 months</string>
+    <string name="hint_age_unknown">Date not found — it must be taken within the last 6 months</string>
+    <string name="hint_age_future">Photo date is in the future — check your phone’s clock</string>
     <string name="hint_file_too_large">File is over 240 KB</string>
     <string name="hint_file_size_range">Size must be 600–1200 px</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_camera">Camera</string>
+    <string name="settings_auto">Auto-capture</string>
+    <string name="settings_auto_sub">Take the photo when everything is green</string>
+    <string name="settings_voice">Voice instructions</string>
+    <string name="settings_voice_sub">Speak the guidance out loud</string>
+    <string name="settings_measure">Show measurements</string>
+    <string name="settings_measure_sub">Head size and eye line on the viewfinder</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_about">About</string>
+    <string name="settings_rules_asof">Rules as of %1$s</string>
+    <string name="settings_disclaimer">Not affiliated with the U.S. government. Always check the official instructions before you submit.</string>
+    <string name="settings_official">Official photo requirements</string>
+    <string name="lang_system">System default</string>
+
+    <!-- Help -->
+    <string name="help_title">Help</string>
+    <string name="help_rules_title">The rules</string>
+    <string name="help_rules_1">Square photo, %1$d–%2$d px, JPEG, %3$d KB or less</string>
+    <string name="help_rules_2">Head height %1$d–%2$d%% of the photo; eyes %3$d–%4$d%% up from the bottom</string>
+    <string name="help_rules_3">Both eyes open, neutral expression, looking straight at the camera</string>
+    <string name="help_rules_4">Plain white or off-white background, no shadows</string>
+    <string name="help_rules_5">No glasses (unless medically required), no hats or head coverings (unless religious or medical)</string>
+    <string name="help_rules_6">Taken within the last 6 months and showing how you look now</string>
+    <string name="help_rules_7">Color photo, one person only, no filters or retouching</string>
+    <string name="help_tips_title">Tips for a great photo</string>
+    <string name="help_tips_1">Stand about 1 meter from a white wall</string>
+    <string name="help_tips_2">Face a window or lamp so the light is even, with no shadows</string>
+    <string name="help_tips_3">Hold the phone at eye level</string>
+    <string name="help_tips_4">Ask someone to help, or lean the phone on a stack of books</string>
+    <string name="help_tips_5">Keep hair off your face and eyes</string>
+    <string name="help_nofilter_title">No filters, no AI</string>
+    <string name="help_nofilter_1">This app switches off the camera’s effects and vendor extensions (HDR looks, beauty and portrait modes) and never edits pixels — it only crops and resizes.</string>
+    <string name="help_nofilter_2">Don’t use beauty apps, filters, “AI enhance” or portrait mode. Even small touch-ups can get an entry disqualified.</string>
+    <string name="help_nofilter_3">Photos you upload are checked for AI and editing marks hidden in the file data.</string>
+    <string name="help_kids_title">Babies and children</string>
+    <string name="help_kids_1">Every family member needs their own photo, including each child under 21.</string>
+    <string name="help_kids_2">Nobody else, and no toys or pacifiers, may be in the picture. For a baby, lay them on a plain white sheet and shoot from above.</string>
+    <string name="help_kids_3">The same size and background rules apply. Try to catch the baby with both eyes open and a calm face.</string>
+    <string name="help_cant_title">What the app can’t check</string>
+    <string name="help_cant_1">Glasses, hats and head coverings</string>
+    <string name="help_cant_2">The real age of a photo whose date was removed</string>
+    <string name="help_cant_3">Subtle retouching done in other apps — only use unedited photos</string>
+    <string name="help_open_entry">Open the DV entry website</string>
 </resources>

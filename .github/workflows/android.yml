@@ -1,9 +1,12 @@
-name: Android CI
+name: CI
 on:
   push:
   pull_request:
+
 jobs:
-  build:
+  # Fast checks that need no Android SDK: rules engine, strings/translations, Compose screens rendered headlessly,
+  # and a compile of the Android-specific code against stubs.
+  logic:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -11,13 +14,42 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: actions/setup-python@v5
         with:
-          gradle-version: 8.11.1
-      - name: Unit tests (rules engine)
-        run: gradle :core:test
-      - name: Debug APK
-        run: gradle :app:assembleDebug
+          python-version: "3.12"
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Resource checks (keys, placeholders, locales)
+        run: |
+          python3 tools/check_resources.py
+          python3 tools/test_check_resources.py
+      - name: Rules engine tests (JVM)
+        run: ./gradlew -p core test
+      - name: Render every screen in every language (headless Compose)
+        run: ./gradlew -p harness desktopTest
+      - name: Compile Android code against stubs
+        run: tools/check-android.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: screenshots
+          path: harness/build/screenshots/*.png
+
+  # The real thing: needs the Android SDK.
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Unit tests + debug APK
+        run: ./gradlew :core:test :app:assembleDebug
+      - name: Android lint
+        run: ./gradlew :app:lintDebug
+        continue-on-error: true
       - uses: actions/upload-artifact@v4
         with:
           name: dv-photo-debug-apk

@@ -2,13 +2,24 @@ package app.dvphoto.core
 
 /**
  * DV Lottery photo rules. Keep every number here so a rule change is a one-file edit.
- * Source: U.S. Department of State DV photo requirements - re-verify before each registration period.
+ *
+ * Sources (verify before each registration period - the State Department can change them):
+ *  - https://travel.state.gov/content/travel/en/us-visas/visa-information-resources/photos.html
+ *  - https://dvprogram.state.gov  (entry site, shows the digital image requirements)
  */
 object DvRules {
+    const val RULES_AS_OF = "2026-10"
+    const val OFFICIAL_PHOTO_URL = "https://travel.state.gov/content/travel/en/us-visas/visa-information-resources/photos.html"
+    const val DV_ENTRY_URL = "https://dvprogram.state.gov"
+
+    // Digital image (DV entry form)
     const val MIN_SIDE_PX = 600
     const val MAX_SIDE_PX = 1200
     const val MAX_FILE_BYTES = 240 * 1024
     const val OUTPUT_TARGET_SIDE = 1000
+
+    /** Photo must have been taken within the last 6 months (about 183 days). */
+    const val MAX_PHOTO_AGE_DAYS = 183
 
     // Official bands (fractions of image height)
     const val HEAD_MIN = 0.50f
@@ -35,11 +46,20 @@ object DvRules {
     const val MAX_LIGHT_ASYMMETRY = 0.20f
     const val BG_LUMA_MIN = 170f
     const val BG_STD_MAX = 22f
+    /** Share of the wall allowed to deviate strongly from the smooth lighting plane (posters, shadows, objects). */
+    const val BG_OUTLIER_MAX = 0.06f
+    /** A step of this many luma levels between neighbouring wall samples is an edge (shadow border, frame, door). */
+    const val BG_EDGE_STEP = 30f
+    /** Share of neighbouring wall sample pairs allowed to be edges. */
+    const val BG_EDGE_MAX = 0.02f
     const val BG_CHROMA_MAX = 28f
     const val MIN_SHARPNESS = 25f
 
-    /** Face-contour top sits at the hairline; the real "top of head" is a bit higher. */
-    const val HEAD_TOP_EXTENSION = 0.15f
+    /**
+     * The face contour ends at the hairline; the real top of the head (hair included) is higher.
+     * Used only when the top of the hair cannot be measured directly (see [HeadTopFinder]).
+     */
+    const val HEAD_TOP_EXTENSION = 0.20f
 }
 
 /** On-screen target geometry, in fractions of the square frame (y from the top). */
