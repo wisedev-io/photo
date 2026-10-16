@@ -154,6 +154,45 @@ class MetadataTest {
         assertEquals(Status.PASS, Provenance.editing(f).status)
     }
 
+    @Test fun shortAppNamesMustBeWholeWords() {
+        // firmware / build strings that merely contain an app-like fragment are NOT filter apps
+        for (fw in listOf("G991BXXS2AB612", "S901BXXU4CWINK1", "SM-A546E_SNOWY", "HUAWEI-ULIKELY-1.0", "13.0.0.AB612CN")) {
+            val f = scan(TestJpeg.app1Exif(ExifSpec(software = fw)))
+            assertTrue("$fw -> ${f.flags}", f.flags.isEmpty())
+        }
+        // ...while the real apps still are
+        for (app in listOf("B612 Camera 12.1", "Snow - AI Profile", "Wink 3.0", "GIMP 2.10", "Ulike")) {
+            val f = scan(TestJpeg.app1Exif(ExifSpec(software = app)))
+            assertTrue("$app -> ${f.flags}", f.flags.isNotEmpty())
+        }
+    }
+
+    @Test fun realisticHonestPhotosAreNotFlagged() {
+        // Pixel-style Ultra HDR XMP (gain map + container directory), standard scene type
+        val pixelXmp = """<x:xmpmeta xmlns:x="adobe:ns:meta/"><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+            <rdf:Description xmlns:hdrgm="http://ns.adobe.com/hdr-gain-map/1.0/" hdrgm:Version="1.0"
+              xmlns:Container="http://ns.google.com/photos/1.0/container/" xmlns:Item="http://ns.google.com/photos/1.0/container/item/">
+              <Container:Directory><rdf:Seq><rdf:li><Container:Item Item:Semantic="Primary" Item:Mime="image/jpeg"/></rdf:li>
+              <rdf:li><Container:Item Item:Semantic="GainMap" Item:Mime="image/jpeg" Item:Length="48321"/></rdf:li></rdf:Seq></Container:Directory>
+            </rdf:Description></rdf:RDF></x:xmpmeta>"""
+        val pixel = scan(
+            TestJpeg.app1Exif(ExifSpec(make = "Google", model = "Pixel 9", software = "HDR+ 1.0.71", dateTimeOriginal = "2026:09:20 14:00:00", sceneCaptureType = 0)),
+            TestJpeg.app1Xmp(pixelXmp),
+        )
+        assertTrue(pixel.flags.toString(), pixel.flags.isEmpty())
+        assertEquals(Status.PASS, Provenance.editing(pixel).status)
+
+        val iphone = scan(TestJpeg.app1Exif(ExifSpec(make = "Apple", model = "iPhone 15", software = "17.6.1", dateTimeOriginal = "2026:08:02 09:41:00", sceneCaptureType = 0)))
+        assertTrue(iphone.flags.isEmpty())
+
+        val samsung = scan(TestJpeg.app1Exif(ExifSpec(make = "samsung", model = "SM-S928B", software = "S928BXXU3AXI5", dateTimeOriginal = "2026:09:01 18:30:00")))
+        assertTrue(samsung.flags.isEmpty())
+
+        // a camera that records Content Credentials (capture only) is fine
+        val c2pa = scan(TestJpeg.app11("JP\u0000\u0000jumb c2pa.created c2pa.actions c2pa.opened"))
+        assertEquals(Status.PASS, Provenance.editing(c2pa).status)
+    }
+
     @Test fun garbageAndTruncatedInputNeverCrash() {
         val rnd = java.util.Random(7)
         repeat(300) {

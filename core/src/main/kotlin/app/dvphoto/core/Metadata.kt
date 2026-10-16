@@ -85,10 +85,27 @@ object MetadataScanner {
 
     fun classifyApp(text: String): Pair<EditFlag?, String?> {
         val t = text.lowercase()
-        aiTools.firstOrNull { t.contains(it) }?.let { return EditFlag.AI_TOOL to it }
-        beautyApps.firstOrNull { t.contains(it) }?.let { return EditFlag.BEAUTY_APP to it }
-        editors.firstOrNull { t.contains(it) }?.let { return EditFlag.EDITOR_APP to it }
+        aiTools.firstOrNull { mentions(t, it) }?.let { return EditFlag.AI_TOOL to it }
+        beautyApps.firstOrNull { mentions(t, it) }?.let { return EditFlag.BEAUTY_APP to it }
+        editors.firstOrNull { mentions(t, it) }?.let { return EditFlag.EDITOR_APP to it }
         return null to null
+    }
+
+    /**
+     * True when [token] occurs in the already lower-cased [text]. Short tokens ("b612", "snow", "wink", "gimp"...)
+     * must stand alone as a word, otherwise a phone's firmware string such as "G991BXXS2AB612" would look like an app.
+     */
+    internal fun mentions(text: String, token: String): Boolean {
+        var from = 0
+        while (true) {
+            val i = text.indexOf(token, from)
+            if (i < 0) return false
+            if (token.length > 6) return true
+            val before = if (i == 0) ' ' else text[i - 1]
+            val after = if (i + token.length >= text.length) ' ' else text[i + token.length]
+            if (!before.isLetterOrDigit() && !after.isLetterOrDigit()) return true
+            from = i + 1
+        }
     }
 
     // --- entry point ------------------------------------------------------------------------
@@ -246,7 +263,7 @@ object MetadataScanner {
             flags += EditFlag.CREDENTIALS_PRESENT
             if (credentialEdits.any { whole.contains(it) }) flags += EditFlag.CREDENTIALS_EDITED
         }
-        aiTools.firstOrNull { whole.contains(it) && it.length >= 9 }?.let { flags += EditFlag.AI_TOOL; matched = it }
+        aiTools.firstOrNull { it.length >= 9 && whole.contains(it) }?.let { flags += EditFlag.AI_TOOL; matched = it }
         return MetadataFindings(format = format, flags = flags, matched = matched, hasXmp = hasXmp)
     }
 
@@ -274,7 +291,7 @@ object MetadataScanner {
         val fields = listOfNotNull(a.software, a.creatorTool, a.description, a.userComment)
         for (t in fields + listOf(blob)) {
             val lower = t.lowercase()
-            val hit = aiTools.firstOrNull { lower.contains(it) }
+            val hit = aiTools.firstOrNull { mentions(lower, it) }
             if (hit != null) { flags += EditFlag.AI_TOOL; matched = matched ?: hit; break }
         }
         // Beauty / editor apps are looked up in descriptive fields only (XMP namespaces mention "adobe" everywhere)

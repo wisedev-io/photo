@@ -56,6 +56,7 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetector
 import kotlin.math.abs
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -145,6 +146,19 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     private var existing by mutableStateOf<Set<String>>(emptySet())
     private var nameTouched = false
 
+    /** Runs [block] on the view-model scope; any failure (out of memory, unreadable file...) becomes [onFailure], never a crash. */
+    private fun launchGuarded(onFailure: (Throwable) -> Unit, block: suspend () -> Unit) {
+        viewModelScope.launch {
+            try {
+                block()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (t: Throwable) {
+                onFailure(t)
+            }
+        }
+    }
+
     // ===========================================================================================
     // Navigation
     // ===========================================================================================
@@ -212,17 +226,19 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
 
     /** Takes ownership of [image] (always closed). */
     fun onCaptured(image: ImageProxy) {
-        viewModelScope.launch {
+        if (screen != Screen.Camera) { // the user already left the camera: drop the picture
+            image.close()
+            shutterBusy = false
+            return
+        }
+        launchGuarded(onFailure = { onCaptureFailed(); screen = Screen.Camera }) {
             val square = withContext(Dispatchers.Default) {
                 try {
                     squareOf(image.toBitmap(), image.imageInfo.rotationDegrees)
-                } catch (t: Throwable) {
-                    null
                 } finally {
                     image.close()
                 }
             }
-            if (square == null) { onCaptureFailed(); return@launch }
             screen = Screen.Busy(R.string.busy)
             val out = withContext(Dispatchers.Default) {
                 PhotoExporter.renderSquare(square, 0, 0, square.width, PhotoExporter.outputSide(square.width)).also { square.recycle() }
@@ -251,10 +267,10 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
 
     fun onPicked(uri: Uri) {
         screen = Screen.Busy(R.string.busy)
-        viewModelScope.launch {
+        launchGuarded(onFailure = { message = R.string.err_decode; screen = Screen.Home }) {
             val app = getApplication<Application>()
             val src = withContext(Dispatchers.IO) { decodeBounded(app, uri) }
-            if (src == null) { message = R.string.err_decode; screen = Screen.Home; return@launch }
+            if (src == null) { message = R.string.err_decode; screen = Screen.Home; return@launchGuarded }
 
             // What the file says about itself: filters, AI, editing apps, date taken
             val provenance = withContext(Dispatchers.IO) {
@@ -337,6 +353,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         val enc = withContext(Dispatchers.Default) { PhotoExporter.encode(out) }
         out.recycle()
         val preview = withContext(Dispatchers.Default) { BitmapFactory.decodeByteArray(enc.bytes, 0, enc.bytes.size) }
+            ?: error("The encoded JPEG could not be decoded")
         val checks = Validator.validate(a.reading, a.scene, side, mirrored = false) + extra +
             Validator.fileCheck(enc.bytes.size, enc.side)
         return ResultData(enc.bytes, preview.asImageBitmap(), enc.side, checks, fromUpload, autoCropped)
@@ -400,17 +417,12 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         if (saving) return
         saving = true
         saveError = null
-        viewModelScope.launch {
-            try {
-                val saved = withContext(Dispatchers.IO) {
-                    PhotoStorage.save(getApplication(), s.data.jpeg, nameText, folder)
-                }
-                finishSave(s.data, saved.displayName, saved.location, saved.uri)
-            } catch (t: Throwable) {
-                saveError = R.string.err_save
-            } finally {
-                saving = false
+        launchGuarded(onFailure = { saveError = R.string.err_save; saving = false }) {
+            val saved = withContext(Dispatchers.IO) {
+                PhotoStorage.save(getApplication(), s.data.jpeg, nameText, folder)
             }
+            saving = false
+            finishSave(s.data, saved.displayName, saved.location, saved.uri)
         }
     }
 
@@ -420,18 +432,13 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         if (saving) return
         saving = true
         saveError = null
-        viewModelScope.launch {
-            try {
-                val name = withContext(Dispatchers.IO) {
-                    PhotoStorage.writeTo(getApplication(), uri, s.data.jpeg)
-                    PhotoStorage.displayNameOf(getApplication(), uri)
-                } ?: "${FileNaming.baseOrDefault(nameText)}.${FileNaming.EXTENSION}"
-                finishSave(s.data, name, null, uri)
-            } catch (t: Throwable) {
-                saveError = R.string.err_save
-            } finally {
-                saving = false
-            }
+        launchGuarded(onFailure = { saveError = R.string.err_save; saving = false }) {
+            val name = withContext(Dispatchers.IO) {
+                PhotoStorage.writeTo(getApplication(), uri, s.data.jpeg)
+                PhotoStorage.displayNameOf(getApplication(), uri)
+            } ?: "${FileNaming.baseOrDefault(nameText)}.${FileNaming.EXTENSION}"
+            saving = false
+            finishSave(s.data, name, null, uri)
         }
     }
 
@@ -440,13 +447,16 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     private suspend fun finishSave(data: ResultData, fileName: String, location: String?, uri: Uri) {
-        dao.insert(
-            PhotoRecord(
-                uri = uri.toString(), name = fileName, createdAt = System.currentTimeMillis(), sizeBytes = data.jpeg.size,
-                sidePx = data.side, source = if (data.fromUpload) "UPLOAD" else "CAMERA", role = role.name,
-                folder = folder.name, passed = data.ok,
+        // the file is already safely on the phone: a failing history write must not report a failed save
+        runCatching {
+            dao.insert(
+                PhotoRecord(
+                    uri = uri.toString(), name = fileName, createdAt = System.currentTimeMillis(), sizeBytes = data.jpeg.size,
+                    sidePx = data.side, source = if (data.fromUpload) "UPLOAD" else "CAMERA", role = role.name,
+                    folder = folder.name, passed = data.ok,
+                )
             )
-        )
+        }
         screen = Screen.Saved(SavedInfo(data, fileName, location, uri))
     }
 

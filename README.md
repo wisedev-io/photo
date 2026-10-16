@@ -59,6 +59,8 @@ calibrate on a few real faces.
 
 Not detectable: glasses, hats / head coverings. The app asks up front and lists them in Help.
 
+First time on a real phone? See [docs/DEVICE_TESTING.md](docs/DEVICE_TESTING.md) for the calibration steps and the test checklist.
+
 ## Architecture
 
 ```
