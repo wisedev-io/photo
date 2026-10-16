@@ -30,6 +30,8 @@ android {
     }
     kotlinOptions { jvmTarget = "17" }
     buildFeatures { compose = true }
+    // The in-app language picker switches languages at run time, so Play must not strip the other languages.
+    bundle { language { enableSplit = false } }
     packaging { resources.excludes += "/META-INF/{AL2.0,LGPL2.1}" }
 }
 
@@ -52,6 +54,7 @@ dependencies {
     implementation(libs.camerax.camera2)
     implementation(libs.camerax.lifecycle)
     implementation(libs.camerax.view)
+    implementation(libs.androidx.annotation.experimental) // @OptIn that Android lint understands
 
     implementation(libs.mlkit.face)
 

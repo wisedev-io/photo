@@ -30,7 +30,7 @@
     <string name="rule_nofilters">Sans filtres ni retouches IA</string>
     <string name="rule_recent">Prise il y a moins de 6 mois</string>
     <string name="home_recent">Photos enregistrées</string>
-    <string name="home_privacy">Tout se passe sur votre téléphone. Les photos ne sont jamais envoyées. Sans lien avec le gouvernement des États-Unis.</string>
+    <string name="home_privacy">Les photos ne sont jamais envoyées. Sans lien avec le gouvernement des États-Unis.</string>
     <string name="cam_flip">Changer</string>
     <string name="cam_shutter">Prendre la photo</string>
     <string name="cam_nofilters">Sans filtres</string>

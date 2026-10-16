@@ -30,7 +30,7 @@
     <string name="rule_nofilters">কোনো ফিল্টার বা এআই এডিট নয়</string>
     <string name="rule_recent">গত ৬ মাসের মধ্যে তোলা</string>
     <string name="home_recent">সংরক্ষিত ছবি</string>
-    <string name="home_privacy">সবকিছু আপনার ফোনেই হয়। ছবি কখনো আপলোড হয় না। মার্কিন সরকারের সঙ্গে কোনো সম্পর্ক নেই।</string>
+    <string name="home_privacy">ছবি কখনো আপলোড হয় না। মার্কিন সরকারের সঙ্গে কোনো সম্পর্ক নেই।</string>
     <string name="cam_flip">বদলান</string>
     <string name="cam_shutter">ছবি তুলুন</string>
     <string name="cam_nofilters">ফিল্টার নেই</string>

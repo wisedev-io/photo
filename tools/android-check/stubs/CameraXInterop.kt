@@ -3,7 +3,7 @@ package androidx.camera.camera2.interop
 import android.hardware.camera2.CaptureRequest
 import androidx.camera.core.ExtendableBuilder
 
-@RequiresOptIn(level = RequiresOptIn.Level.ERROR)
+// a Java annotation in the real library: Kotlin does not enforce it, Android lint does
 annotation class ExperimentalCamera2Interop
 
 class Camera2Interop private constructor() {

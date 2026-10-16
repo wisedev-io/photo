@@ -30,7 +30,7 @@
     <string name="rule_nofilters">Sem filtros nem edições de IA</string>
     <string name="rule_recent">Tirada nos últimos 6 meses</string>
     <string name="home_recent">Fotos salvas</string>
-    <string name="home_privacy">Tudo acontece no seu telefone. As fotos nunca são enviadas. Sem vínculo com o governo dos EUA.</string>
+    <string name="home_privacy">As fotos nunca são enviadas. Sem vínculo com o governo dos EUA.</string>
     <string name="cam_flip">Alternar</string>
     <string name="cam_shutter">Tirar foto</string>
     <string name="cam_nofilters">Sem filtros</string>

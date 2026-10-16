@@ -30,7 +30,7 @@
     <string name="rule_nofilters">ያለ ማጣሪያ እና AI ማስተካከያ</string>
     <string name="rule_recent">ባለፉት 6 ወራት ውስጥ የተነሳ ፎቶ</string>
     <string name="home_recent">የተቀመጡ ፎቶዎች</string>
-    <string name="home_privacy">ሁሉም ነገር የሚከናወነው በስልክዎ ላይ ነው። ፎቶዎች በፍጹም አይሰቀሉም። ይህ መተግበሪያ ከአሜሪካ መንግሥት ጋር ግንኙነት የለውም።</string>
+    <string name="home_privacy">ፎቶዎች በፍጹም አይሰቀሉም። ይህ መተግበሪያ ከአሜሪካ መንግሥት ጋር ግንኙነት የለውም።</string>
     <string name="cam_flip">ካሜራ ይቀይሩ</string>
     <string name="cam_shutter">ፎቶ ያንሱ</string>
     <string name="cam_nofilters">ያለ ማጣሪያ</string>

@@ -30,7 +30,7 @@
     <string name="rule_nofilters">फिल्टर वा कृत्रिम बुद्धिमत्ता (AI) एडिट छैन</string>
     <string name="rule_recent">पछिल्लो 6 महिनाभित्र खिचेको</string>
     <string name="home_recent">सेभ गरिएका फोटो</string>
-    <string name="home_privacy">सबै काम तपाईंको फोनमै हुन्छ। फोटो कहिल्यै अपलोड हुँदैन। यो एपको अमेरिकी सरकारसँग कुनै सम्बन्ध छैन।</string>
+    <string name="home_privacy">फोटो कहिल्यै अपलोड हुँदैन। यो एपको अमेरिकी सरकारसँग कुनै सम्बन्ध छैन।</string>
     <string name="cam_flip">बदल्नुहोस्</string>
     <string name="cam_shutter">फोटो खिच्नुहोस्</string>
     <string name="cam_nofilters">फिल्टर छैन</string>

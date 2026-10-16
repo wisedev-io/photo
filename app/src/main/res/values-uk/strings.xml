@@ -30,7 +30,7 @@
     <string name="rule_nofilters">Без фільтрів і обробки ШІ</string>
     <string name="rule_recent">Знято за останні 6 місяців</string>
     <string name="home_recent">Збережені фото</string>
-    <string name="home_privacy">Усе відбувається на вашому телефоні. Фото нікуди не надсилаються. Додаток не пов’язаний з урядом США.</string>
+    <string name="home_privacy">Фото нікуди не надсилаються. Додаток не пов’язаний з урядом США.</string>
     <string name="cam_flip">Перемкнути</string>
     <string name="cam_shutter">Зробити фото</string>
     <string name="cam_nofilters">Без фільтрів</string>

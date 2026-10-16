@@ -109,16 +109,21 @@ What each layer proves — and what it does not:
 * `harness` compiles the real UI sources and renders them (Compose Multiplatform 1.5 / Skia) in 13 languages,
   including RTL, so overflow and clipping are caught.
 * `check-android.sh` type-checks the Android code against the real `android.jar` and hand-written stubs of CameraX,
-  ML Kit, Room, lifecycle and activity-compose. A stub is only as accurate as its author — **the Android build and a
-  device remain the judges**. Nothing here has been run on a phone yet.
+  ML Kit, Room, lifecycle and activity-compose. A stub is only as accurate as its author, so CI also does the real
+  thing: `:app:assembleDebug` with the Android SDK (the APK is uploaded as an artifact) and Android lint. **A device
+  remains the judge**: nothing here has been run on a phone yet.
 
 ## Privacy
 
-* Photos are processed on the device and written only where you choose. The app contains no networking code,
-  no account, no analytics and no ads.
+* Photos are processed on the device and written only where you choose. The app's own code contains no networking,
+  no account, no analytics and no ads, and nothing is backed up to the cloud or transferred between phones
+  (`allowBackup="false"` plus explicit data-extraction rules).
 * The app's own manifest requests only `CAMERA` and, on Android 9 and older, `WRITE_EXTERNAL_STORAGE`
   (to save into Pictures/Download).
-* Third-party libraries (notably Google's ML Kit) can merge extra permissions such as `INTERNET` into the final
-  manifest for their own anonymous usage statistics. This has **not** been checked here (no Android build was possible);
-  inspect *Merged Manifest* in Android Studio, and if you want a hard guarantee, test removing it with
-  `tools:node="remove"` on a real device before shipping — ML Kit's bundled face model itself works offline.
+* **Checked in CI (the merged manifest of the debug build is printed in the log):** the final manifest also contains
+  `INTERNET` and `ACCESS_NETWORK_STATE`, merged in from Google's ML Kit / Data Transport libraries. ML Kit's bundled
+  face model runs fully on the device and this app never sends a photo anywhere, but those permissions mean the
+  libraries *could* send their own anonymous usage statistics. If you need a hard guarantee, remove both with
+  `tools:node="remove"` in `app/src/main/AndroidManifest.xml` and **test on a real phone first** (take, check, save,
+  rotate): some libraries expect `ACCESS_NETWORK_STATE`. That was not done here because it cannot be verified
+  without a device.

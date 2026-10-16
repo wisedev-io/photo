@@ -30,7 +30,7 @@
     <string name="rule_nofilters">Filtre ve yapay zekâ düzenlemesi yok</string>
     <string name="rule_recent">Son 6 ayda çekilmiş</string>
     <string name="home_recent">Kaydedilen fotoğraflar</string>
-    <string name="home_privacy">Her şey telefonunuzda gerçekleşir. Fotoğraflar asla yüklenmez. ABD hükümetiyle bağlantısı yoktur.</string>
+    <string name="home_privacy">Fotoğraflar asla yüklenmez. ABD hükümetiyle bağlantısı yoktur.</string>
     <string name="cam_flip">Çevir</string>
     <string name="cam_shutter">Fotoğraf çek</string>
     <string name="cam_nofilters">Filtre yok</string>

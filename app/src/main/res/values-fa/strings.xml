@@ -30,7 +30,7 @@
     <string name="rule_nofilters">بدون فیلتر و ویرایش هوش مصنوعی</string>
     <string name="rule_recent">گرفته‌شده در 6 ماه اخیر</string>
     <string name="home_recent">عکس‌های ذخیره‌شده</string>
-    <string name="home_privacy">همه‌چیز روی گوشی شما انجام می‌شود. عکس‌ها هرگز آپلود نمی‌شوند. این برنامه وابسته به دولت آمریکا نیست.</string>
+    <string name="home_privacy">عکس‌ها هرگز آپلود نمی‌شوند. این برنامه وابسته به دولت آمریکا نیست.</string>
     <string name="cam_flip">تعویض</string>
     <string name="cam_shutter">گرفتن عکس</string>
     <string name="cam_nofilters">بدون فیلتر</string>

@@ -9,8 +9,10 @@ import java.nio.ByteBuffer
 import java.util.concurrent.Executor
 import java.util.concurrent.TimeUnit
 
-@RequiresOptIn(level = RequiresOptIn.Level.ERROR)
+// CameraX markers are Java annotations (androidx.annotation.RequiresOptIn): Kotlin does not enforce them, Android lint does.
 annotation class ExperimentalGetImage
+
+annotation class ExperimentalImageCaptureOutputFormat
 
 interface ImageInfo { val rotationDegrees: Int }
 

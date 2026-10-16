@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">DV Photo</string>
+    <string name="app_name" translatable="false">DV Photo</string>
 
     <!-- Common actions -->
     <string name="action_back">Back</string>
@@ -34,7 +34,7 @@
     <string name="rule_nofilters">No filters, no AI edits</string>
     <string name="rule_recent">Taken in the last 6 months</string>
     <string name="home_recent">Saved photos</string>
-    <string name="home_privacy">Everything happens on your phone. Photos are never uploaded. Not affiliated with the U.S. government.</string>
+    <string name="home_privacy">Your photos are never uploaded. Not affiliated with the U.S. government.</string>
 
     <!-- Camera -->
     <string name="cam_flip">Flip</string>

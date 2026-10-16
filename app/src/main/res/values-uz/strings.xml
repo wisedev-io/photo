@@ -30,7 +30,7 @@
     <string name="rule_nofilters">Filtrsiz, SI tahrirlarisiz</string>
     <string name="rule_recent">Soʻnggi 6 oyda olingan</string>
     <string name="home_recent">Saqlangan rasmlar</string>
-    <string name="home_privacy">Hammasi telefoningizda bajariladi. Rasmlar hech qayerga yuborilmaydi. AQSh hukumati bilan aloqasi yoʻq.</string>
+    <string name="home_privacy">Rasmlar hech qayerga yuborilmaydi. AQSh hukumati bilan aloqasi yoʻq.</string>
     <string name="cam_flip">Almashtirish</string>
     <string name="cam_shutter">Rasmga olish</string>
     <string name="cam_nofilters">Filtrsiz</string>

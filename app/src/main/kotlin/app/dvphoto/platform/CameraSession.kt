@@ -8,6 +8,7 @@ import androidx.camera.camera2.interop.Camera2Interop
 import androidx.camera.camera2.interop.ExperimentalCamera2Interop
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ExperimentalImageCaptureOutputFormat
 import androidx.camera.core.ExtendableBuilder
 import androidx.camera.core.FocusMeteringAction
 import androidx.camera.core.ImageAnalysis
@@ -79,6 +80,7 @@ class CameraSession(private val context: Context, private val analyzer: ImageAna
         try { p.hasCamera(selector) } catch (t: Throwable) { false }
 
     /** @return true when everything is live, false for capture-only mode, null when nothing could be bound. */
+    @androidx.annotation.OptIn(markerClass = [ExperimentalImageCaptureOutputFormat::class])
     private fun bindUseCases(p: ProcessCameraProvider, owner: LifecycleOwner, view: PreviewView, selector: CameraSelector): Boolean? {
         p.unbindAll()
         val preview = Preview.Builder()
@@ -145,7 +147,7 @@ class CameraSession(private val context: Context, private val analyzer: ImageAna
         .build()
 
     /** Pins Camera2 to "no effects, no scene mode" so nothing can colour, smooth or relight the picture. */
-    @OptIn(ExperimentalCamera2Interop::class)
+    @androidx.annotation.OptIn(markerClass = [ExperimentalCamera2Interop::class])
     private fun <T> pinNoFilters(builder: ExtendableBuilder<T>) {
         Camera2Interop.Extender(builder)
             .setCaptureRequestOption(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)

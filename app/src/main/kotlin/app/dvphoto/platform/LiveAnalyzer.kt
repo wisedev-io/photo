@@ -27,7 +27,7 @@ class LiveAnalyzer(
 ) : ImageAnalysis.Analyzer {
     private var last = 0L
 
-    @OptIn(ExperimentalGetImage::class)
+    @androidx.annotation.OptIn(markerClass = [ExperimentalGetImage::class])
     override fun analyze(image: ImageProxy) {
         val now = SystemClock.elapsedRealtime()
         val media = image.image

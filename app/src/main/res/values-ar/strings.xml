@@ -30,7 +30,7 @@
     <string name="rule_nofilters">بلا فلاتر أو تعديلات بالذكاء الاصطناعي</string>
     <string name="rule_recent">ملتقطة خلال آخر 6 أشهر</string>
     <string name="home_recent">الصور المحفوظة</string>
-    <string name="home_privacy">كل شيء يتم على هاتفك. لا يتم رفع الصور أبدًا. لا علاقة للتطبيق بالحكومة الأمريكية.</string>
+    <string name="home_privacy">لا يتم رفع الصور أبدًا. لا علاقة للتطبيق بالحكومة الأمريكية.</string>
     <string name="cam_flip">تبديل</string>
     <string name="cam_shutter">التقاط صورة</string>
     <string name="cam_nofilters">بلا فلاتر</string>

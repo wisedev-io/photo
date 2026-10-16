@@ -13,8 +13,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.produceState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
@@ -30,8 +33,9 @@ import kotlinx.coroutines.withContext
 @Composable
 fun RecentThumb(uri: String, passed: Boolean, modifier: Modifier = Modifier) {
     val ctx = LocalContext.current
-    val bmp by produceState<ImageBitmap?>(null, uri) {
-        value = withContext(Dispatchers.IO) { loadThumbnail(ctx, Uri.parse(uri), 240)?.asImageBitmap() }
+    var bmp by remember(uri) { mutableStateOf<ImageBitmap?>(null) }
+    LaunchedEffect(uri) {
+        bmp = withContext(Dispatchers.IO) { loadThumbnail(ctx, Uri.parse(uri), 240)?.asImageBitmap() }
     }
     val shape = RoundedCornerShape(16.dp)
     Box(
