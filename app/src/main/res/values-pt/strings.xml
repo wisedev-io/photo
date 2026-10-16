@@ -65,6 +65,8 @@
     <string name="result_auto_crop">Recortamos sua foto automaticamente no enquadramento certo.</string>
     <string name="result_upload_note">Não conseguimos ver óculos, cobertura na cabeça nem retoques dentro dos pixels. Confirme que a foto é recente e não foi editada.</string>
     <string name="result_risk">Salvar uma foto com problemas é por sua conta e risco: o Departamento de Estado pode rejeitá-la.</string>
+    <string name="result_levels_checked">Rigor: %1$s</string>
+    <string name="result_levels_passes">Passaria no nível: %1$s</string>
     <string name="result_specs">%1$d × %1$d px · %2$d KB · JPEG</string>
     <string name="name_title">Nome e salvar</string>
     <string name="name_all_ok">Todas as verificações aprovadas</string>
@@ -143,6 +145,7 @@
     <string name="hint_edit_portrait">O modo retrato suaviza e desfoca: use a câmera normal</string>
     <string name="hint_edit_software">Editada em software de fotos: use a foto original</string>
     <string name="hint_age_old">Tirada há cerca de %1$d meses: precisa ser dos últimos 6 meses</string>
+    <string name="hint_age_near">Tirada há cerca de %1$d meses: perto demais do limite de 6 meses. Use uma foto mais recente.</string>
     <string name="hint_age_unknown">Data não encontrada: a foto deve ter sido tirada nos últimos 6 meses</string>
     <string name="hint_age_future">A data da foto está no futuro: verifique o relógio do telefone</string>
     <string name="hint_file_too_large">O arquivo passa de 240 KB</string>
@@ -161,6 +164,19 @@
     <string name="settings_disclaimer">Sem vínculo com o governo dos EUA. Sempre consulte as instruções oficiais antes de enviar.</string>
     <string name="settings_official">Requisitos oficiais da foto</string>
     <string name="lang_system">Padrão do sistema</string>
+    <string name="settings_strictness">Rigor da verificação</string>
+    <string name="level_relaxed">Flexível</string>
+    <string name="level_standard">Padrão</string>
+    <string name="level_strict">Rigoroso</string>
+    <string name="level_relaxed_sub">Exatamente os limites oficiais, verificações flexíveis no resto. Menos repetições, mas maior risco de recusa.</string>
+    <string name="level_standard_sub">Limites oficiais com uma pequena margem de segurança. Recomendado.</string>
+    <string name="level_strict_sub">Grande margem de segurança e verificações rígidas; fotos editadas ou sem data são reprovadas. Melhores chances, mais repetições.</string>
+    <string name="rules_sources_title">De onde vêm as regras</string>
+    <string name="rules_sources_intro">O Departamento de Estado dos EUA define as regras e toma a decisão final. Este app mede sua foto, então as verificações são estimativas.</string>
+    <string name="rules_origin_number">Número oficial</string>
+    <string name="rules_origin_words">Texto oficial</string>
+    <string name="rules_legend">Número oficial: publicado pelo Departamento de Estado. Texto oficial: exigido apenas em palavras, então os limites exatos que usamos são nossos.</string>
+    <string name="rules_stale">Estas regras foram verificadas há %1$d meses e podem ter mudado. Abra a página oficial antes de se inscrever.</string>
     <string name="help_title">Ajuda</string>
     <string name="help_rules_title">As regras</string>
     <string name="help_rules_1">Foto quadrada, %1$d–%2$d px, JPEG, até %3$d KB</string>

@@ -136,6 +136,8 @@ fun AppRoot(vm: AppViewModel, versionName: String, onRecreate: () -> Unit) {
                                 voice = vm.voice,
                                 measurements = vm.measurements,
                                 versionName = versionName,
+                                strictness = vm.strictness,
+                                staleMonths = vm.staleMonths,
                             ),
                             onBack = vm::goHome,
                             onLanguage = { tag -> if (tag != vm.languageTag) { vm.updateLanguage(tag); onRecreate() } },
@@ -143,12 +145,15 @@ fun AppRoot(vm: AppViewModel, versionName: String, onRecreate: () -> Unit) {
                             onVoice = vm::updateVoice,
                             onMeasurements = vm::updateMeasurements,
                             onOpenOfficial = { openUrl(ctx, DvRules.OFFICIAL_PHOTO_URL) },
+                            onStrictness = vm::updateStrictness,
                         )
                     }
                     Screen.Help -> HelpScreen(
                         onBack = vm::goHome,
                         onOpenOfficial = { openUrl(ctx, DvRules.OFFICIAL_PHOTO_URL) },
                         onOpenEntry = { openUrl(ctx, DvRules.DV_ENTRY_URL) },
+                        staleMonths = vm.staleMonths,
+                        onOpenUrl = { openUrl(ctx, it) },
                     )
                 }
             }

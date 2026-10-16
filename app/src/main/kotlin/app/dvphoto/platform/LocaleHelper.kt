@@ -7,7 +7,7 @@ import java.util.Locale
 /** In-app language choice that works on every Android version (no AppCompat needed). */
 object LocaleHelper {
     /** Language tags the app is translated into; "" means "follow the system". */
-    val tags: List<String> = listOf("", "en", "ru", "uz", "es", "fr", "pt", "tr", "ar", "bn")
+    val tags: List<String> = listOf("", "en", "ru", "uz", "ar", "fr", "es", "uk", "fa", "tr", "ne", "am", "pt", "bn")
 
     /** Names written in their own language, so people can always find theirs. */
     fun nativeName(tag: String): String? = when (tag) {
@@ -20,6 +20,10 @@ object LocaleHelper {
         "tr" -> "Türkçe"
         "ar" -> "العربية"
         "bn" -> "বাংলা"
+        "uk" -> "Українська"
+        "fa" -> "فارسی"
+        "ne" -> "नेपाली"
+        "am" -> "አማርኛ"
         else -> null
     }
 

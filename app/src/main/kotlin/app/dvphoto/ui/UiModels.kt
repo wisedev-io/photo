@@ -6,6 +6,7 @@ import app.dvphoto.core.FaceReading
 import app.dvphoto.core.PhotoRole
 import app.dvphoto.core.SceneStats
 import app.dvphoto.core.Status
+import app.dvphoto.core.Strictness
 
 /** Plain state holders the screens render. Nothing here depends on Android, so the harness can render them. */
 
@@ -27,6 +28,9 @@ class ResultUi(
     val checks: List<Check>,
     val fromUpload: Boolean,
     val autoCropped: Boolean,
+    /** The strictness the checks were judged at, and the looser levels at which this photo would pass. */
+    val level: Strictness = Strictness.DEFAULT,
+    val passesAt: List<Strictness> = emptyList(),
 ) {
     val ok: Boolean = checks.none { it.status == Status.FAIL }
     val warnings: Int = checks.count { it.status == Status.WARN }
@@ -60,4 +64,7 @@ class SettingsUi(
     val voice: Boolean,
     val measurements: Boolean,
     val versionName: String,
+    val strictness: Strictness = Strictness.DEFAULT,
+    /** Months since the rules were last checked, when that is long enough that they may have changed. */
+    val staleMonths: Int? = null,
 )

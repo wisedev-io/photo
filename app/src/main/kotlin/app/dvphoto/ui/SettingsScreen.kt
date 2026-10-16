@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.dvphoto.R
 import app.dvphoto.core.DvRules
+import app.dvphoto.core.Strictness
 
 @Composable
 fun SettingsScreen(
@@ -37,12 +38,25 @@ fun SettingsScreen(
     onVoice: (Boolean) -> Unit,
     onMeasurements: (Boolean) -> Unit,
     onOpenOfficial: () -> Unit,
+    onStrictness: (Strictness) -> Unit = {},
 ) {
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
         ScreenTopBar(stringResource(R.string.settings_title), onBack, stringResource(R.string.action_back))
+
+        SectionLabel(stringResource(R.string.settings_strictness))
+        Card(Modifier.fillMaxWidth()) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Segmented(
+                    options = Strictness.values().map { it to stringResource(it.res()) },
+                    selected = state.strictness,
+                    onSelect = onStrictness,
+                )
+                Text(stringResource(state.strictness.descriptionRes()), color = Pal.Muted, fontSize = 13.sp, lineHeight = 18.sp)
+            }
+        }
 
         SectionLabel(stringResource(R.string.settings_camera))
         Card(Modifier.fillMaxWidth()) {
@@ -91,6 +105,9 @@ fun SettingsScreen(
             Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Text(stringResource(R.string.app_name) + "  " + state.versionName, color = Pal.Text, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 Text(stringResource(R.string.settings_rules_asof, DvRules.RULES_AS_OF), color = Pal.Muted, fontSize = 13.sp)
+                state.staleMonths?.let {
+                    Text(stringResource(R.string.rules_stale, it), color = Pal.Amber, fontSize = 13.sp, lineHeight = 18.sp)
+                }
                 Text(stringResource(R.string.settings_disclaimer), color = Pal.Muted, fontSize = 13.sp, lineHeight = 18.sp)
                 Spacer(Modifier.height(6.dp))
                 AppButton(stringResource(R.string.settings_official), onOpenOfficial, Modifier.fillMaxWidth(), BtnStyle.Secondary)

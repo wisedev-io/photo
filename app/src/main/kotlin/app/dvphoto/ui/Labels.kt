@@ -8,7 +8,9 @@ import app.dvphoto.R
 import app.dvphoto.core.Check
 import app.dvphoto.core.CheckId
 import app.dvphoto.core.Hint
+import app.dvphoto.core.Origin
 import app.dvphoto.core.Status
+import app.dvphoto.core.Strictness
 import kotlin.math.roundToInt
 
 @StringRes
@@ -41,6 +43,7 @@ fun Hint.res(): Int = when (this) {
     Hint.EDIT_PORTRAIT -> R.string.hint_edit_portrait
     Hint.EDIT_SOFTWARE -> R.string.hint_edit_software
     Hint.AGE_OLD -> R.string.hint_age_old
+    Hint.AGE_NEAR_LIMIT -> R.string.hint_age_near
     Hint.AGE_UNKNOWN -> R.string.hint_age_unknown
     Hint.AGE_FUTURE -> R.string.hint_age_future
     Hint.FILE_TOO_LARGE -> R.string.hint_file_too_large
@@ -65,10 +68,30 @@ fun CheckId.res(): Int = when (this) {
     CheckId.FILE -> R.string.check_file
 }
 
-/** Instruction / explanation text of a check; the age hint carries the number of months. */
+@StringRes
+fun Strictness.res(): Int = when (this) {
+    Strictness.RELAXED -> R.string.level_relaxed
+    Strictness.STANDARD -> R.string.level_standard
+    Strictness.STRICT -> R.string.level_strict
+}
+
+@StringRes
+fun Strictness.descriptionRes(): Int = when (this) {
+    Strictness.RELAXED -> R.string.level_relaxed_sub
+    Strictness.STANDARD -> R.string.level_standard_sub
+    Strictness.STRICT -> R.string.level_strict_sub
+}
+
+@StringRes
+fun Origin.res(): Int = when (this) {
+    Origin.OFFICIAL_NUMBER -> R.string.rules_origin_number
+    Origin.OFFICIAL_WORDS -> R.string.rules_origin_words
+}
+
+/** Instruction / explanation text of a check; the age hints carry the number of months. */
 @Composable
 fun Check.hintText(): String =
-    if (hint == Hint.AGE_OLD) stringResource(R.string.hint_age_old, (value ?: 0f).roundToInt())
+    if (hint == Hint.AGE_OLD || hint == Hint.AGE_NEAR_LIMIT) stringResource(hint.res(), (value ?: 0f).roundToInt())
     else stringResource(hint.res())
 
 /** Short measurement shown next to a check, e.g. "58%" for the head size; null when there is nothing to show. */

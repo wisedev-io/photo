@@ -57,6 +57,18 @@ fun ResultScreen(
             }
         }
 
+        // how strict the check was, and which looser levels this photo would pass
+        Text(
+            buildString {
+                append(stringResource(R.string.result_levels_checked, stringResource(result.level.res())))
+                if (result.passesAt.isNotEmpty()) {
+                    append("  ·  ")
+                    append(stringResource(R.string.result_levels_passes, result.passesAt.map { stringResource(it.res()) }.joinToString(", ")))
+                }
+            },
+            color = Pal.Muted, fontSize = 13.sp, lineHeight = 18.sp,
+        )
+
         ChecksCard(result.checks)
 
         AppButton(

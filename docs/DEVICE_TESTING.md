@@ -1,8 +1,9 @@
 # First run on a real phone: calibration and checklist
 
-Everything that can be verified without a device is verified in CI (rules engine, 9-language rendering, Android code
+Everything that can be verified without a device is verified in CI (rules engine, 13-language rendering, Android code
 compiled against stubs). What follows is what **only a phone can tell you**. Do it once per camera generation you care
-about, then adjust the constants in `core/src/main/kotlin/app/dvphoto/core/DvRules.kt` and re-run `./gradlew -p core test`.
+about, then adjust the constants in `core/src/main/kotlin/app/dvphoto/core/Strictness.kt` (the limits per level;
+`HEAD_TOP_EXTENSION` stays in `DvRules.kt`) and re-run `./gradlew -p core test`.
 
 ## 1. Calibrate head measurement (10 minutes)
 
@@ -19,18 +20,30 @@ about, then adjust the constants in `core/src/main/kotlin/app/dvphoto/core/DvRul
 
 ## 2. Thresholds that depend on the camera
 
-| Constant | Symptom if wrong |
+Each is a field of `Thresholds` in `Strictness.kt`, one value per level. Calibrate **Standard** first, then check the
+other two against it (see the strictness checklist below).
+
+| Field | Symptom if wrong |
 |---|---|
-| `FACE_LUMA_MIN/MAX`, `MAX_LIGHT_ASYMMETRY` | good light rejected / bad light accepted (especially dark skin tones) |
-| `BG_LUMA_MIN`, `BG_STD_MAX`, `BG_OUTLIER_MAX`, `BG_EDGE_*` | a clean white wall rejected, or a shadow / poster accepted |
-| `BG_CHROMA_MAX` | warm indoor light makes a white wall look "tinted" |
-| `MIN_SHARPNESS` | sharp photos rejected (low-light phones) or blurry ones accepted |
-| `MAX_YAW`, `MAX_PITCH`, `MAX_ROLL` | impossible to hold still enough / too forgiving |
+| `faceLumaMin/Max`, `maxLightAsymmetry` | good light rejected / bad light accepted (especially dark skin tones) |
+| `bgLumaMin`, `bgStdMax`, `bgOutlierMax`, `bgEdgeMax` | a clean white wall rejected, or a shadow / poster accepted |
+| `bgChromaMax` | warm indoor light makes a white wall look "tinted" |
+| `minSharpness` | sharp photos rejected (low-light phones) or blurry ones accepted. Photos are analysed at 600 × 600, where edges are steeper than in a larger picture — expect to raise it |
+| `maxYaw`, `maxPitch`, `maxRoll` | impossible to hold still enough / too forgiving |
+| `holdMs`, `steadyTolerance` | auto-capture never fires (too tight) or fires while you are still moving |
 
 ## 3. Checklist
 
+Strictness (Settings → Strictness)
+- [ ] *Standard*: a careful photo in good light against a white wall is accepted within a few tries
+- [ ] *Strict*: the same careful photo can still be accepted (if auto-capture never fires, loosen `Strict` in `Strictness.kt`)
+- [ ] *Relaxed*: accepts photos at the official limits (head 50 % or 69 %), and nothing the official numbers forbid
+- [ ] Take a photo that fails at *Standard* only by a little: the result screen lists the looser level it would pass at
+- [ ] Open *Help → Where the rules come from*: every row opens its State Department page in the browser
+- [ ] Set the phone's date 11+ months after `DvRules.RULES_AS_OF`: a yellow "rules may have changed" line appears in Settings and Help
+
 Camera
-- [ ] Front camera: shapes line up with the face, instructions change as you move, auto-capture fires after ~1.2 s steady
+- [ ] Front camera: shapes line up with the face, instructions change as you move, auto-capture fires after ~1.2 s steady (Standard)
 - [ ] Back camera (flip button), someone else holding the phone
 - [ ] Switching off *Auto-capture* in Settings → only the button takes the picture
 - [ ] *Voice instructions* speak (English, and your language if the TTS engine has it)
@@ -58,6 +71,8 @@ Save
 - [ ] Upload that file on the real DV entry site and confirm it is accepted
 
 Other
-- [ ] Switch language to Arabic → layout mirrors, nothing overlaps
+- [ ] Switch language to Arabic and to Persian → layout mirrors, nothing overlaps
+- [ ] Switch to Nepali and Amharic → text renders (no empty squares) and nothing is cut off
+- [ ] Voice instructions in Ukrainian / Persian / Nepali / Amharic: the TTS engine may lack a voice — the app must stay silent or fall back, never crash
 - [ ] Rotate / fold / multi-window → no crash, camera keeps working
 - [ ] Android 7.x: launcher icon shows, app starts

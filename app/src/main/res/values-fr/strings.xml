@@ -65,6 +65,8 @@
     <string name="result_auto_crop">Nous avons recadré automatiquement votre photo.</string>
     <string name="result_upload_note">Nous ne voyons pas les lunettes, couvre-chefs ni retouches dans les pixels. Assurez-vous que la photo est récente et non retouchée.</string>
     <string name="result_risk">Enregistrer une photo avec des problèmes est à vos risques : le Département d’État peut la refuser.</string>
+    <string name="result_levels_checked">Rigueur : %1$s</string>
+    <string name="result_levels_passes">Réussirait au niveau : %1$s</string>
     <string name="result_specs">%1$d × %1$d px · %2$d Ko · JPEG</string>
     <string name="name_title">Nom et enregistrement</string>
     <string name="name_all_ok">Toutes les vérifications réussies</string>
@@ -143,6 +145,7 @@
     <string name="hint_edit_portrait">Le mode portrait lisse et floute : utilisez l’appareil photo normal</string>
     <string name="hint_edit_software">Modifiée dans un logiciel photo : utilisez la photo d’origine</string>
     <string name="hint_age_old">Prise il y a environ %1$d mois : elle doit dater de moins de 6 mois</string>
+    <string name="hint_age_near">Prise il y a environ %1$d mois : trop proche de la limite de 6 mois. Utilisez une photo plus récente.</string>
     <string name="hint_age_unknown">Date introuvable : la photo doit dater de moins de 6 mois</string>
     <string name="hint_age_future">La date de la photo est dans le futur : vérifiez l’horloge du téléphone</string>
     <string name="hint_file_too_large">Le fichier dépasse 240 Ko</string>
@@ -161,6 +164,19 @@
     <string name="settings_disclaimer">Sans lien avec le gouvernement des États-Unis. Vérifiez toujours les instructions officielles avant d’envoyer.</string>
     <string name="settings_official">Exigences officielles pour la photo</string>
     <string name="lang_system">Langue du système</string>
+    <string name="settings_strictness">Niveau de rigueur</string>
+    <string name="level_relaxed">Souple</string>
+    <string name="level_standard">Standard</string>
+    <string name="level_strict">Strict</string>
+    <string name="level_relaxed_sub">Exactement les limites officielles, contrôles souples pour le reste. Moins de reprises, mais plus de risque de refus.</string>
+    <string name="level_standard_sub">Limites officielles avec une petite marge de sécurité. Recommandé.</string>
+    <string name="level_strict_sub">Grande marge de sécurité et contrôles serrés ; les photos retouchées ou sans date échouent. Meilleures chances, plus de reprises.</string>
+    <string name="rules_sources_title">D’où viennent les règles</string>
+    <string name="rules_sources_intro">Le Département d’État américain fixe les règles et prend la décision finale. Cette appli mesure votre photo : ses contrôles sont donc des estimations.</string>
+    <string name="rules_origin_number">Chiffre officiel</string>
+    <string name="rules_origin_words">Texte officiel</string>
+    <string name="rules_legend">Chiffre officiel : publié par le Département d’État. Texte officiel : exigé seulement par des mots, donc les limites exactes que nous utilisons sont les nôtres.</string>
+    <string name="rules_stale">Ces règles ont été vérifiées il y a %1$d mois et ont peut-être changé. Ouvrez la page officielle avant de vous inscrire.</string>
     <string name="help_title">Aide</string>
     <string name="help_rules_title">Les règles</string>
     <string name="help_rules_1">Photo carrée, %1$d–%2$d px, JPEG, %3$d Ko maximum</string>

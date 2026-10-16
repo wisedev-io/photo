@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.dvphoto.R
 import app.dvphoto.core.Status
+import app.dvphoto.core.Strictness
 import app.dvphoto.core.Validator
 import kotlin.math.roundToInt
 
@@ -79,6 +80,7 @@ fun CameraChrome(
     autoCapture: Boolean,
     showMeasurements: Boolean,
     manualOnly: Boolean = false,
+    strictness: Strictness = Strictness.DEFAULT,
     onClose: () -> Unit,
     onFlip: () -> Unit,
     onShutter: () -> Unit,
@@ -127,7 +129,7 @@ fun CameraChrome(
             // Square viewfinder + guide shapes
             Box(Modifier.fillMaxWidth().aspectRatio(1f).clip(RoundedCornerShape(28.dp)).background(Color.Black)) {
                 preview()
-                GuideOverlay(live.reading, tone, mirrored, Modifier.fillMaxSize())
+                GuideOverlay(live.reading, tone, mirrored, Modifier.fillMaxSize(), strictness.t.eyeMin..strictness.t.eyeMax)
                 if (showMeasurements) {
                     MeasurementsBadge(live, Modifier.align(Alignment.TopStart).padding(10.dp))
                 }

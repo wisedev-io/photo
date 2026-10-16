@@ -1,0 +1,20 @@
+name: Rules watch
+# Monthly: do the figures the app enforces (core/.../DvRules.kt) still appear on the State Department's pages?
+# A failure means "go and read the pages" - see docs/RULES.md. It never changes anything by itself.
+on:
+  schedule:
+    - cron: "17 6 1 * *"
+  workflow_dispatch:
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Offline tests of the watch itself
+        run: python3 tools/test_check_rules_online.py
+      - name: Compare the app's figures with the official pages
+        run: python3 tools/check_rules_online.py

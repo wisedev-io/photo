@@ -1,24 +1,37 @@
 package app.dvphoto.core
 
 /**
- * DV Lottery photo rules. Keep every number here so a rule change is a one-file edit.
+ * The numbers the State Department publishes for DV Lottery photos, plus the geometry the app aims for.
  *
- * Sources (verify before each registration period - the State Department can change them):
+ * Two other places complete the picture:
+ *  - [Strictness] holds everything the user can tune (safety margins and the limits for things the State
+ *    Department only describes in words, such as pose, light and background).
+ *  - [RuleCatalogue] records where every rule comes from, so the app can show its sources honestly.
+ *
+ * Re-compare this file with the official pages before each registration period and bump [RULES_AS_OF]:
  *  - https://travel.state.gov/content/travel/en/us-visas/visa-information-resources/photos.html
  *  - https://dvprogram.state.gov  (entry site, shows the digital image requirements)
  */
 object DvRules {
+    /** Month (yyyy-MM) in which these rules were last compared with the official pages. */
     const val RULES_AS_OF = "2026-10"
     const val OFFICIAL_PHOTO_URL = "https://travel.state.gov/content/travel/en/us-visas/visa-information-resources/photos.html"
     const val DV_ENTRY_URL = "https://dvprogram.state.gov"
 
-    // Digital image (DV entry form)
+    // Digital image (official)
     const val MIN_SIDE_PX = 600
     const val MAX_SIDE_PX = 1200
     const val MAX_FILE_BYTES = 240 * 1024
-    const val OUTPUT_TARGET_SIDE = 1000
 
-    /** Photo must have been taken within the last 6 months (about 183 days). */
+    /**
+     * The saved photo is this many pixels square. The Digital Image Requirements page allows 600-1200 px and the
+     * Department's own crop tool produces exactly 600 x 600, so 600 is valid whichever wording is current - and it
+     * is the lightest file that is always allowed (more JPEG quality per kilobyte, less memory).
+     */
+    const val OUTPUT_TARGET_SIDE = MIN_SIDE_PX
+
+    /** The photo must have been taken within the last 6 months (about 183 days). */
+    const val MAX_PHOTO_AGE_MONTHS = 6
     const val MAX_PHOTO_AGE_DAYS = 183
 
     // Official bands (fractions of image height)
@@ -27,33 +40,17 @@ object DvRules {
     const val EYE_MIN = 0.56f // eye line measured from the bottom edge
     const val EYE_MAX = 0.69f
 
-    // Where we aim, and how far inside the official band we insist on being
+    // Where we aim: the middle of the bands. The strictness level decides how far from it a photo may stray.
     const val HEAD_TARGET = 0.60f
     const val EYE_TARGET = 0.625f
-    const val MARGIN = 0.02f
 
-    // Pose / expression
-    const val MAX_ROLL = 5f
-    const val MAX_YAW = 8f
-    const val MAX_PITCH = 10f
-    const val MIN_EYES_OPEN = 0.6f
-    const val MAX_SMILE = 0.5f
-    const val MAX_OFF_CENTER = 0.05f
+    // Measurement parameters (how the picture is read, not what passes). They do not depend on the strictness level.
 
-    // Light / background / sharpness (luma 0..255). Tunable on real devices.
-    const val FACE_LUMA_MIN = 55f
-    const val FACE_LUMA_MAX = 215f
-    const val MAX_LIGHT_ASYMMETRY = 0.20f
-    const val BG_LUMA_MIN = 170f
-    const val BG_STD_MAX = 22f
-    /** Share of the wall allowed to deviate strongly from the smooth lighting plane (posters, shadows, objects). */
-    const val BG_OUTLIER_MAX = 0.06f
     /** A step of this many luma levels between neighbouring wall samples is an edge (shadow border, frame, door). */
     const val BG_EDGE_STEP = 30f
-    /** Share of neighbouring wall sample pairs allowed to be edges. */
-    const val BG_EDGE_MAX = 0.02f
-    const val BG_CHROMA_MAX = 28f
-    const val MIN_SHARPNESS = 25f
+
+    /** The head-top finder gives up on walls that are less even than this (luma standard deviation after the plane fit). */
+    const val HEAD_TOP_MAX_BG_STD = 33f
 
     /**
      * The face contour ends at the hairline; the real top of the head (hair included) is higher.

@@ -65,6 +65,8 @@
     <string name="result_auto_crop">Fotoğrafınızı doğru kadraja göre otomatik kırptık.</string>
     <string name="result_upload_note">Gözlük, baş örtüsü veya rötuşu piksellerin içinde göremeyiz. Fotoğrafın yeni ve düzenlenmemiş olduğundan emin olun.</string>
     <string name="result_risk">Sorunlu bir fotoğrafı kaydetmek size aittir: Dışişleri Bakanlığı reddedebilir.</string>
+    <string name="result_levels_checked">Sıkılık: %1$s</string>
+    <string name="result_levels_passes">Şu seviyede geçerdi: %1$s</string>
     <string name="result_specs">%1$d × %1$d px · %2$d KB · JPEG</string>
     <string name="name_title">Ad ve kaydet</string>
     <string name="name_all_ok">Tüm kontroller geçti</string>
@@ -143,6 +145,7 @@
     <string name="hint_edit_portrait">Portre modu yumuşatır ve bulanıklaştırır — normal kamerayı kullanın</string>
     <string name="hint_edit_software">Fotoğraf yazılımında düzenlenmiş — orijinal fotoğrafı kullanın</string>
     <string name="hint_age_old">Yaklaşık %1$d ay önce çekilmiş — son 6 ay içinde olmalı</string>
+    <string name="hint_age_near">Yaklaşık %1$d ay önce çekilmiş — 6 aylık sınıra çok yakın. Daha yeni bir fotoğraf kullanın.</string>
     <string name="hint_age_unknown">Tarih bulunamadı — fotoğraf son 6 ay içinde çekilmiş olmalı</string>
     <string name="hint_age_future">Fotoğraf tarihi gelecekte — telefonun saatini kontrol edin</string>
     <string name="hint_file_too_large">Dosya 240 KB’tan büyük</string>
@@ -161,6 +164,19 @@
     <string name="settings_disclaimer">ABD hükümetiyle bağlantısı yoktur. Göndermeden önce her zaman resmî talimatları kontrol edin.</string>
     <string name="settings_official">Resmî fotoğraf gereksinimleri</string>
     <string name="lang_system">Sistem varsayılanı</string>
+    <string name="settings_strictness">Denetim sıkılığı</string>
+    <string name="level_relaxed">Esnek</string>
+    <string name="level_standard">Standart</string>
+    <string name="level_strict">Sıkı</string>
+    <string name="level_relaxed_sub">Tam olarak resmî sınırlar, diğer kontroller esnek. Daha az yeniden çekim, ama reddedilme riski daha yüksek.</string>
+    <string name="level_standard_sub">Resmî sınırlar artı küçük bir güvenlik payı. Önerilir.</string>
+    <string name="level_strict_sub">Geniş güvenlik payı ve sıkı kontroller; düzenlenmiş veya tarihsiz fotoğraflar geçmez. En iyi şans, daha çok yeniden çekim.</string>
+    <string name="rules_sources_title">Kurallar nereden geliyor</string>
+    <string name="rules_sources_intro">Kuralları ABD Dışişleri Bakanlığı belirler ve nihai kararı o verir. Bu uygulama fotoğrafınızı ölçer, bu yüzden kontrolleri birer tahmindir.</string>
+    <string name="rules_origin_number">Resmî sayı</string>
+    <string name="rules_origin_words">Resmî metin</string>
+    <string name="rules_legend">Resmî sayı: Dışişleri Bakanlığı tarafından yayımlanır. Resmî metin: yalnızca sözle istenir, bu yüzden kullandığımız kesin sınırlar bize aittir.</string>
+    <string name="rules_stale">Bu kurallar %1$d ay önce kontrol edildi ve değişmiş olabilir. Başvurmadan önce resmî sayfayı açın.</string>
     <string name="help_title">Yardım</string>
     <string name="help_rules_title">Kurallar</string>
     <string name="help_rules_1">Kare fotoğraf, %1$d–%2$d px, JPEG, en fazla %3$d KB</string>

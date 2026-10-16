@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.dvphoto.core.Check
+import app.dvphoto.core.RuleCatalogue
 import app.dvphoto.core.Status
 
 /** Problems first (failures, then warnings), then the checks that passed. */
@@ -56,6 +57,13 @@ fun CheckRow(c: Check) {
         Column(Modifier.weight(1f).padding(start = 12.dp)) {
             Text(stringResource(c.id.res()), color = Pal.Text, fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
             Text(c.hintText(), color = if (c.status == Status.PASS) Pal.Muted else color, fontSize = 13.sp, lineHeight = 17.sp)
+            if (c.status != Status.PASS) { // where the rule behind a problem comes from
+                val rule = RuleCatalogue.of(c.id)
+                Text(
+                    stringResource(rule.origin.res()) + " · " + rule.source.title,
+                    color = Pal.Muted, fontSize = 11.sp, modifier = Modifier.padding(top = 2.dp),
+                )
+            }
         }
         c.valueText()?.let { Pill(it, color, Modifier.padding(start = 8.dp)) }
     }

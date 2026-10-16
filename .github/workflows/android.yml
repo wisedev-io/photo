@@ -22,6 +22,7 @@ jobs:
         run: |
           python3 tools/check_resources.py
           python3 tools/test_check_resources.py
+          python3 tools/test_check_rules_online.py
       - name: Rules engine tests (JVM)
         run: ./gradlew -p core test
       - name: Render every screen in every language (headless Compose)

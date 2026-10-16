@@ -137,8 +137,8 @@ class CoreTest {
     @Test fun sceneAnalyzerFlagsBusyBackgroundAndShadow() {
         val busy = Synthetic { x, y -> if (x in 350..650 && y in 120..690) { if (x < 500) 60 else 160 } else if ((x / 40 + y / 40) % 2 == 0) 80 else 240 }
         val s = SceneAnalyzer.analyze(busy, 0, 0, 1000, good(), withSharpness = false).stats
-        assertTrue("asym ${s.lightAsymmetry}", s.lightAsymmetry > DvRules.MAX_LIGHT_ASYMMETRY)
-        assertTrue("bg std ${s.bgStd}", s.bgStd > DvRules.BG_STD_MAX)
+        assertTrue("asym ${s.lightAsymmetry}", s.lightAsymmetry > Strictness.STANDARD.t.maxLightAsymmetry)
+        assertTrue("bg std ${s.bgStd}", s.bgStd > Strictness.STANDARD.t.bgStdMax)
         assertNotNull(Validator.firstProblem(Validator.validate(good(), s, 1000, false)))
     }
 
@@ -147,7 +147,7 @@ class CoreTest {
         val flat = Synthetic { _, _ -> 128 }
         val sc = SceneAnalyzer.analyze(crisp, 0, 0, 1000, good(), true).stats.sharpness!!
         val sf = SceneAnalyzer.analyze(flat, 0, 0, 1000, good(), true).stats.sharpness!!
-        assertTrue("crisp $sc", sc > DvRules.MIN_SHARPNESS)
-        assertTrue("flat $sf", sf < DvRules.MIN_SHARPNESS)
+        assertTrue("crisp $sc", sc > Strictness.STANDARD.t.minSharpness)
+        assertTrue("flat $sf", sf < Strictness.STANDARD.t.minSharpness)
     }
 }

@@ -65,6 +65,8 @@
     <string name="result_auto_crop">قصصنا صورتك تلقائيًا إلى الإطار الصحيح.</string>
     <string name="result_upload_note">لا نستطيع رؤية النظارات أو أغطية الرأس أو التنقيح داخل البكسلات. تأكد من أن الصورة حديثة وغير معدّلة.</string>
     <string name="result_risk">حفظ صورة بها مشكلات يكون على مسؤوليتك — قد ترفضها وزارة الخارجية.</string>
+    <string name="result_levels_checked">الصرامة: %1$s</string>
+    <string name="result_levels_passes">كانت ستنجح عند: %1$s</string>
     <string name="result_specs">%1$d × %1$d بكسل · %2$d ك.ب · JPEG</string>
     <string name="name_title">التسمية والحفظ</string>
     <string name="name_all_ok">اجتازت كل الفحوص</string>
@@ -143,6 +145,7 @@
     <string name="hint_edit_portrait">وضع البورتريه ينعّم ويطمس — استخدم الكاميرا العادية</string>
     <string name="hint_edit_software">عُدّلت ببرنامج صور — استخدم الصورة الأصلية</string>
     <string name="hint_age_old">التُقطت قبل نحو %1$d أشهر — يجب أن تكون خلال آخر 6 أشهر</string>
+    <string name="hint_age_near">التُقطت قبل نحو %1$d أشهر — قريبة جدًا من حد 6 أشهر. استخدم صورة أحدث.</string>
     <string name="hint_age_unknown">لم يُعثر على التاريخ — يجب أن تكون الصورة ملتقطة خلال آخر 6 أشهر</string>
     <string name="hint_age_future">تاريخ الصورة في المستقبل — تحقق من ساعة هاتفك</string>
     <string name="hint_file_too_large">حجم الملف أكبر من 240 ك.ب</string>
@@ -161,6 +164,19 @@
     <string name="settings_disclaimer">لا علاقة للتطبيق بالحكومة الأمريكية. راجع التعليمات الرسمية دائمًا قبل التقديم.</string>
     <string name="settings_official">المتطلبات الرسمية للصورة</string>
     <string name="lang_system">لغة النظام</string>
+    <string name="settings_strictness">درجة الصرامة</string>
+    <string name="level_relaxed">متساهل</string>
+    <string name="level_standard">عادي</string>
+    <string name="level_strict">صارم</string>
+    <string name="level_relaxed_sub">الحدود الرسمية بالضبط، وفحوص متساهلة فيما عداها. إعادة تصوير أقل، لكن احتمال الرفض أعلى.</string>
+    <string name="level_standard_sub">الحدود الرسمية مع هامش أمان صغير. موصى به.</string>
+    <string name="level_strict_sub">هامش أمان كبير وفحوص دقيقة؛ تفشل الصور المعدّلة أو بلا تاريخ. أفضل فرصة، وإعادة تصوير أكثر.</string>
+    <string name="rules_sources_title">مصدر القواعد</string>
+    <string name="rules_sources_intro">تضع وزارة الخارجية الأمريكية القواعد وتتخذ القرار النهائي. يقيس هذا التطبيق صورتك، لذلك فإن فحوصه تقديرات.</string>
+    <string name="rules_origin_number">رقم رسمي</string>
+    <string name="rules_origin_words">نص رسمي</string>
+    <string name="rules_legend">رقم رسمي: تنشره وزارة الخارجية. نص رسمي: مطلوب بالكلمات فقط، لذلك فالحدود الدقيقة التي نستخدمها من وضعنا.</string>
+    <string name="rules_stale">روجعت هذه القواعد قبل %1$d أشهر وربما تغيّرت. افتح الصفحة الرسمية قبل التقديم.</string>
     <string name="help_title">مساعدة</string>
     <string name="help_rules_title">القواعد</string>
     <string name="help_rules_1">صورة مربعة، %1$d–%2$d بكسل، JPEG، حتى %3$d ك.ب</string>

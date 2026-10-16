@@ -9,4 +9,8 @@
     <locale android:name="tr" />
     <locale android:name="ar" />
     <locale android:name="bn" />
+    <locale android:name="uk" />
+    <locale android:name="fa" />
+    <locale android:name="ne" />
+    <locale android:name="am" />
 </locale-config>

@@ -18,21 +18,22 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import app.dvphoto.core.CaptureGate
 import app.dvphoto.core.Check
-import app.dvphoto.core.CheckId
-import app.dvphoto.core.Hint
 import app.dvphoto.core.Dates
 import app.dvphoto.core.FaceGeometry
 import app.dvphoto.core.FaceReading
 import app.dvphoto.core.FileNaming
+import app.dvphoto.core.Measured
+import app.dvphoto.core.MetadataFindings
 import app.dvphoto.core.MetadataScanner
 import app.dvphoto.core.PhotoRole
-import app.dvphoto.core.Provenance
 import app.dvphoto.core.RawFace
+import app.dvphoto.core.RuleCatalogue
 import app.dvphoto.core.SceneAnalyzer
 import app.dvphoto.core.SceneStats
 import app.dvphoto.core.SmartCrop
 import app.dvphoto.core.SquareCrop
 import app.dvphoto.core.Status
+import app.dvphoto.core.Strictness
 import app.dvphoto.core.Validator
 import app.dvphoto.data.AppDb
 import app.dvphoto.data.PhotoRecord
@@ -64,16 +65,24 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/** A finished photo: the exact JPEG that would be saved, what it looks like, and every check's outcome. */
+/**
+ * A finished photo: the exact JPEG that would be saved, what it looks like, what was measured on it and the
+ * checks judged at [level]. Keeping [measured] lets the app say at which other levels the photo would pass.
+ */
 class ResultData(
     val jpeg: ByteArray,
     val preview: ImageBitmap,
     val side: Int,
-    val checks: List<Check>,
+    val measured: Measured,
+    val level: Strictness,
     val fromUpload: Boolean,
     val autoCropped: Boolean,
 ) {
-    val ui = ResultUi(preview, side, jpeg.size, checks, fromUpload, autoCropped)
+    val checks: List<Check> = measured.checks(level)
+    val ui = ResultUi(
+        preview, side, jpeg.size, checks, fromUpload, autoCropped, level,
+        passesAt = measured.verdicts().filter { it.ok && it.level.ordinal < level.ordinal }.map { it.level },
+    )
     val ok: Boolean get() = checks.none { it.status == Status.FAIL }
 }
 
@@ -116,6 +125,10 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     var voice by mutableStateOf(prefs.voice); private set
     var measurements by mutableStateOf(prefs.measurements); private set
     var languageTag by mutableStateOf(prefs.language); private set
+    var strictness by mutableStateOf(Strictness.fromId(prefs.strictness)); private set
+
+    /** Months since the rules were last compared with the official pages, once that is long enough to matter. */
+    val staleMonths: Int? = RuleCatalogue.staleMonths(Dates.epochDayOf(System.currentTimeMillis()))
 
     // ---- live camera --------------------------------------------------------------------------
 
@@ -126,7 +139,8 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     var shutterTick by mutableIntStateOf(0); private set
 
     private var shutterBusy = false
-    private val gate = CaptureGate()
+    private var gate = newGate()
+    private fun newGate() = CaptureGate(strictness.t.holdMs, strictness.t.steadyTolerance)
 
     private val liveLazy = lazy { FaceDetection.getClient(MlKit.measureOptions(accurate = false)) }
     private val measureLazy = lazy { FaceDetection.getClient(MlKit.measureOptions(accurate = true)) }
@@ -194,6 +208,12 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     fun updateMeasurements(v: Boolean) { measurements = v; prefs.measurements = v }
     fun updateLanguage(tag: String) { languageTag = tag; prefs.language = tag }
 
+    fun updateStrictness(level: Strictness) {
+        strictness = level
+        prefs.strictness = level.id
+        gate = newGate() // auto-capture patience follows the level
+    }
+
     // ===========================================================================================
     // Live camera
     // ===========================================================================================
@@ -207,7 +227,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
 
     fun onLiveFrame(f: LiveFrame) {
         if (screen != Screen.Camera || shutterBusy) return
-        val checks = Validator.validate(f.reading, f.scene, null, mirrored)
+        val checks = Validator.validate(f.reading, f.scene, null, mirrored, strictness)
         val r = f.reading
         val ok = r != null && checks.none { it.status == Status.FAIL }
         val progress = gate.update(r, ok, SystemClock.elapsedRealtime())
@@ -244,7 +264,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
                 PhotoExporter.renderSquare(square, 0, 0, square.width, PhotoExporter.outputSide(square.width)).also { square.recycle() }
             }
             // the picture comes straight from the sensor: only cropped and resized, never filtered
-            val result = evaluate(out, fromUpload = false, autoCropped = false, extra = listOf(Check(CheckId.EDITING, Status.PASS, Hint.OK)))
+            val result = evaluate(out, fromUpload = false, autoCropped = false, findings = null)
             shutterBusy = false
             route(result)
         }
@@ -273,16 +293,14 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
             if (src == null) { message = R.string.err_decode; screen = Screen.Home; return@launchGuarded }
 
             // What the file says about itself: filters, AI, editing apps, date taken
-            val provenance = withContext(Dispatchers.IO) {
+            val findings = withContext(Dispatchers.IO) {
                 val header = readHeader(app, uri)
-                var findings = MetadataScanner.scan(header)
                 val extra = readExifExtras(app, uri)
-                findings = findings.withExtra(extra.software, extra.takenAt)
-                Provenance.evaluate(findings, Dates.epochDayOf(System.currentTimeMillis()))
+                MetadataScanner.scan(header).withExtra(extra.software, extra.takenAt)
             }
 
             val (out, auto) = frameUpload(src)
-            val result = evaluate(out, fromUpload = true, autoCropped = auto, extra = provenance)
+            val result = evaluate(out, fromUpload = true, autoCropped = auto, findings = findings)
             route(result)
         }
     }
@@ -346,17 +364,19 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         return Analysis(result.reading, result.stats)
     }
 
-    /** Runs every check on [out] (the picture exactly as it would be submitted) and encodes it. */
-    private suspend fun evaluate(out: Bitmap, fromUpload: Boolean, autoCropped: Boolean, extra: List<Check>): ResultData {
+    /**
+     * Measures [out] (the picture exactly as it would be submitted), encodes it and judges it at the current level.
+     * [findings] is what the file says about itself; null for pictures taken with this app's camera.
+     */
+    private suspend fun evaluate(out: Bitmap, fromUpload: Boolean, autoCropped: Boolean, findings: MetadataFindings?): ResultData {
         val a = analyze(out, countOthers = true)
         val side = out.width
         val enc = withContext(Dispatchers.Default) { PhotoExporter.encode(out) }
         out.recycle()
         val preview = withContext(Dispatchers.Default) { BitmapFactory.decodeByteArray(enc.bytes, 0, enc.bytes.size) }
             ?: error("The encoded JPEG could not be decoded")
-        val checks = Validator.validate(a.reading, a.scene, side, mirrored = false) + extra +
-            Validator.fileCheck(enc.bytes.size, enc.side)
-        return ResultData(enc.bytes, preview.asImageBitmap(), enc.side, checks, fromUpload, autoCropped)
+        val measured = Measured(a.reading, a.scene, side, enc.bytes.size, enc.side, findings, Dates.epochDayOf(System.currentTimeMillis()))
+        return ResultData(enc.bytes, preview.asImageBitmap(), enc.side, measured, strictness, fromUpload, autoCropped)
     }
 
     /** Photos that pass go straight to naming and saving; others show what to fix first. */

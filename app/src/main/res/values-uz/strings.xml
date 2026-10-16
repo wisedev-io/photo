@@ -65,6 +65,8 @@
     <string name="result_auto_crop">Rasmni toʻgʻri kadrga avtomatik kesdik.</string>
     <string name="result_upload_note">Koʻzoynak, bosh kiyim va retush piksellar ichida koʻrinmaydi. Rasm yangi va tahrirsiz ekaniga ishonch hosil qiling.</string>
     <string name="result_risk">Muammoli rasmni saqlash oʻz javobgarligingizda — Davlat departamenti uni rad etishi mumkin.</string>
+    <string name="result_levels_checked">Qatʼiylik: %1$s</string>
+    <string name="result_levels_passes">Quyidagi darajada oʻtardi: %1$s</string>
     <string name="result_specs">%1$d × %1$d px · %2$d KB · JPEG</string>
     <string name="name_title">Nom va saqlash</string>
     <string name="name_all_ok">Barcha tekshiruvlardan oʻtdi</string>
@@ -143,6 +145,7 @@
     <string name="hint_edit_portrait">Portret rejimi tekislaydi va xiralashtiradi — oddiy kameradan foydalaning</string>
     <string name="hint_edit_software">Rasm dasturida tahrirlangan — asl rasmdan foydalaning</string>
     <string name="hint_age_old">Taxminan %1$d oy oldin olingan — soʻnggi 6 oy ichida boʻlishi kerak</string>
+    <string name="hint_age_near">Taxminan %1$d oy oldin olingan — 6 oylik chegaraga juda yaqin. Yangiroq rasm oling.</string>
     <string name="hint_age_unknown">Sana topilmadi — rasm soʻnggi 6 oy ichida olingan boʻlishi kerak</string>
     <string name="hint_age_future">Rasm sanasi kelajakda — telefon soatini tekshiring</string>
     <string name="hint_file_too_large">Fayl 240 KB dan katta</string>
@@ -161,6 +164,19 @@
     <string name="settings_disclaimer">AQSh hukumati bilan aloqasi yoʻq. Topshirishdan oldin rasmiy talablarni har doim tekshiring.</string>
     <string name="settings_official">Rasmga rasmiy talablar</string>
     <string name="lang_system">Tizim tili</string>
+    <string name="settings_strictness">Tekshiruv qatʼiyligi</string>
+    <string name="level_relaxed">Yengil</string>
+    <string name="level_standard">Oddiy</string>
+    <string name="level_strict">Qatʼiy</string>
+    <string name="level_relaxed_sub">Aynan rasmiy chegaralar, qolganida yumshoq tekshiruv. Kamroq qayta olish, lekin rad etilish xavfi yuqoriroq.</string>
+    <string name="level_standard_sub">Rasmiy chegaralar va kichik zaxira. Tavsiya etiladi.</string>
+    <string name="level_strict_sub">Katta zaxira va qattiq tekshiruv; tahrirlangan yoki sanasiz rasmlar oʻtmaydi. Eng yaxshi imkoniyat, koʻproq qayta olish.</string>
+    <string name="rules_sources_title">Qoidalar qayerdan olingan</string>
+    <string name="rules_sources_intro">Qoidalarni AQSh Davlat departamenti belgilaydi va yakuniy qarorni ham u chiqaradi. Ilova faqat rasmingizni oʻlchaydi, shuning uchun uning tekshiruvlari taxminiy.</string>
+    <string name="rules_origin_number">Rasmiy raqam</string>
+    <string name="rules_origin_words">Rasmiy matn</string>
+    <string name="rules_legend">Rasmiy raqam — Davlat departamenti koʻrsatgan. Rasmiy matn — talab faqat soʻzlar bilan yozilgan, shuning uchun aniq chegaralarni oʻzimiz tanlaganmiz.</string>
+    <string name="rules_stale">Bu qoidalar %1$d oy oldin tekshirilgan va oʻzgargan boʻlishi mumkin. Topshirishdan oldin rasmiy sahifani oching.</string>
     <string name="help_title">Yordam</string>
     <string name="help_rules_title">Qoidalar</string>
     <string name="help_rules_1">Kvadrat rasm, %1$d–%2$d px, JPEG, %3$d KB dan oshmasin</string>

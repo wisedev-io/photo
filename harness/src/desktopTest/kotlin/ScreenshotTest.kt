@@ -17,6 +17,7 @@ import app.dvphoto.core.Guide
 import app.dvphoto.core.Hint
 import app.dvphoto.core.PhotoRole
 import app.dvphoto.core.Status
+import app.dvphoto.core.Strictness
 import app.dvphoto.ui.*
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -54,7 +55,10 @@ class ScreenshotTest {
     )
 
     private fun resultUi(ok: Boolean, upload: Boolean = false) =
-        ResultUi(Harness.portrait(), 1000, 187_000, if (ok) passAll else problems, upload, autoCropped = upload)
+        ResultUi(
+            Harness.portrait(), 1000, 187_000, if (ok) passAll else problems, upload, autoCropped = upload,
+            level = Strictness.STANDARD, passesAt = if (ok) emptyList() else listOf(Strictness.RELAXED),
+        )
 
     private fun nameUi(text: String = "DV_Applicant", ascii: Boolean = false, saving: Boolean = false, err: Int? = null) =
         NameUi(text, PhotoRole.APPLICANT, SaveFolder.GALLERY, "$text.jpg", ascii, saving, err)
@@ -80,9 +84,9 @@ class ScreenshotTest {
         HomeScreen(emptyList(), { i, m -> Thumb(i, m) }, {}, {}, {}, {}, {})
     })
 
-    private fun cameraShot(name: String, live: LiveUi, auto: Boolean = true, measure: Boolean = false, before: Boolean = false) =
+    private fun cameraShot(name: String, live: LiveUi, auto: Boolean = true, measure: Boolean = false, before: Boolean = false, strictness: Strictness = Strictness.STANDARD) =
         check(Harness.render(name) {
-            CameraChrome(live, mirrored = false, canFlip = true, autoCapture = auto, showMeasurements = measure, onClose = {}, onFlip = {}, onShutter = {}) {
+            CameraChrome(live, mirrored = false, canFlip = true, autoCapture = auto, showMeasurements = measure, strictness = strictness, onClose = {}, onFlip = {}, onShutter = {}) {
                 Image(Harness.portrait(900), null, Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
             }
             if (before) BeforeYouStartSheet {}
@@ -138,10 +142,15 @@ class ScreenshotTest {
     )
 
     @Test fun settings() = check(Harness.render("settings", heightDp = 1250) {
-        SettingsScreen(SettingsUi("ru", langs, autoCapture = true, voice = false, measurements = true, versionName = "0.2.0"), {}, {}, {}, {}, {}, {})
+        SettingsScreen(
+            SettingsUi("ru", langs, autoCapture = true, voice = false, measurements = true, versionName = "0.2.0", strictness = Strictness.STRICT, staleMonths = 12),
+            {}, {}, {}, {}, {}, {},
+        )
     })
 
-    @Test fun help() = check(Harness.render("help", heightDp = 2300) { HelpScreen({}, {}, {}) })
+    @Test fun help() = check(Harness.render("help", heightDp = 2700) { HelpScreen({}, {}, {}, staleMonths = 12) })
+
+    @Test fun cameraStrictBand() = cameraShot("camera_strict", LiveUi(goodReading, passAll.filter { it.id != CheckId.FILE }, progress = 0.3f), strictness = Strictness.STRICT)
 }
 
 /** Every important screen in every shipped language, so overflow, clipping and RTL problems show up. */
@@ -159,18 +168,21 @@ class LanguageScreenshotTest {
         Check(CheckId.LIGHTING, Status.FAIL, Hint.UNEVEN_LIGHT),
         Check(CheckId.FILE, Status.PASS, Hint.OK),
     )
-    private val langs = listOf<String?>(null, "ru", "uz", "es", "fr", "pt", "tr", "ar", "bn")
+    private val langs = listOf<String?>(null, "ru", "uz", "ar", "fr", "es", "uk", "fa", "tr", "ne", "am", "pt", "bn")
 
     @androidx.compose.runtime.Composable
     private fun Thumb(item: RecentItem, m: Modifier) = Box(m.background(Color(0xFF2E7D5B)), contentAlignment = Alignment.Center) { Text("DV", color = Color.White) }
 
     @Test fun allLanguages() {
-        val results = ResultUi(Harness.portrait(), 1000, 187_000, problems, fromUpload = true, autoCropped = true)
+        val results = ResultUi(
+            Harness.portrait(), 1000, 187_000, problems, fromUpload = true, autoCropped = true,
+            level = Strictness.STRICT, passesAt = listOf(Strictness.RELAXED, Strictness.STANDARD),
+        )
         val ok = ResultUi(Harness.portrait(), 1000, 187_000, listOf(Check(CheckId.FACE, Status.PASS, Hint.OK)), false, false)
         val name = NameUi("DV_Applicant", PhotoRole.APPLICANT, SaveFolder.GALLERY, "DV_Applicant (1).jpg", false, false)
-        val settings = SettingsUi("", listOf(LanguageOption("", "System"), LanguageOption("ru", "Русский")), true, false, true, "0.2.0")
+        val settings = SettingsUi("", listOf(LanguageOption("", "System"), LanguageOption("ru", "Русский")), true, false, true, "0.2.0", Strictness.STANDARD, 12)
         for (lang in langs) {
-            val rtl = lang == "ar"
+            val rtl = lang == "ar" || lang == "fa"
             val tag = lang ?: "en"
             fun shot(n: String, h: Int, content: @androidx.compose.runtime.Composable () -> Unit) {
                 val f = Harness.render("lang_${n}", lang, heightDp = h, rtl = rtl, content = content)
@@ -186,7 +198,7 @@ class LanguageScreenshotTest {
             shot("name", 1100) { NameSaveScreen(ok, name, {}, {}, {}, {}, {}, {}, {}) }
             shot("result", 1500) { ResultScreen(results, {}, {}, {}) }
             shot("settings", 1250) { SettingsScreen(settings, {}, {}, {}, {}, {}, {}) }
-            shot("help", 2500) { HelpScreen({}, {}, {}) }
+            shot("help", 2900) { HelpScreen({}, {}, {}, staleMonths = 12) }
         }
     }
 }
@@ -196,10 +208,10 @@ class AllHintsTest {
     @Test fun everyHintRendersInEveryLanguage() {
         val all = Hint.values().mapIndexed { i, h ->
             val id = CheckId.values()[i % CheckId.values().size]
-            Check(id, if (h == Hint.OK) Status.PASS else Status.FAIL, h, if (h == Hint.AGE_OLD) 8f else 0.6f)
+            Check(id, if (h == Hint.OK) Status.PASS else Status.FAIL, h, if (h == Hint.AGE_OLD || h == Hint.AGE_NEAR_LIMIT) 5f else 0.6f)
         }
-        for (lang in listOf<String?>(null, "ru", "uz", "es", "fr", "pt", "tr", "ar", "bn")) {
-            val f = Harness.render("allhints", lang, heightDp = 3300, rtl = lang == "ar") {
+        for (lang in listOf<String?>(null, "ru", "uz", "ar", "fr", "es", "uk", "fa", "tr", "ne", "am", "pt", "bn")) {
+            val f = Harness.render("allhints", lang, heightDp = 3300, rtl = lang == "ar" || lang == "fa") {
                 androidx.compose.foundation.layout.Column(Modifier.padding(16.dp)) { ChecksCard(all) }
             }
             assertTrue(Harness.inkRatio(f) > 0.02)

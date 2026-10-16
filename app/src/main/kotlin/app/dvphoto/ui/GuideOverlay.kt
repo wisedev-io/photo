@@ -30,7 +30,14 @@ enum class Tone { NONE, ADJUST, GOOD }
  *  - a white outline of YOUR detected head: line it up with the coloured target
  */
 @Composable
-fun GuideOverlay(reading: FaceReading?, tone: Tone, mirrored: Boolean, modifier: Modifier = Modifier) {
+fun GuideOverlay(
+    reading: FaceReading?,
+    tone: Tone,
+    mirrored: Boolean,
+    modifier: Modifier = Modifier,
+    /** The eye-line band (fractions of the height from the bottom) that the current strictness level accepts. */
+    eyeBand: ClosedFloatingPointRange<Float> = DvRules.EYE_MIN..DvRules.EYE_MAX,
+) {
     val color by animateColorAsState(
         when (tone) { Tone.NONE -> Color.White.copy(alpha = 0.7f); Tone.ADJUST -> Pal.Amber; Tone.GOOD -> Pal.Mint },
         tween(250), label = "tone",
@@ -59,8 +66,8 @@ fun GuideOverlay(reading: FaceReading?, tone: Tone, mirrored: Boolean, modifier:
         drawPath(dim, Color.Black.copy(alpha = 0.40f))
 
         // Allowed eye band + target eye line
-        val bandTop = (1f - DvRules.EYE_MAX) * w
-        val bandH = (DvRules.EYE_MAX - DvRules.EYE_MIN) * w
+        val bandTop = (1f - eyeBand.endInclusive) * w
+        val bandH = (eyeBand.endInclusive - eyeBand.start) * w
         drawRect(color.copy(alpha = 0.10f), Offset(0f, bandTop), Size(w, bandH))
         drawLine(color.copy(alpha = 0.6f), Offset(w * 0.16f, Guide.eyeY * w), Offset(w * 0.84f, Guide.eyeY * w), 2.dp.toPx(), pathEffect = dash)
 

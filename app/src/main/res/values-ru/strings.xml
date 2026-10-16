@@ -65,6 +65,8 @@
     <string name="result_auto_crop">Мы автоматически обрезали фото по нужной рамке.</string>
     <string name="result_upload_note">Мы не видим очки, головные уборы и ретушь в самих пикселях. Убедитесь, что фото свежее и без обработки.</string>
     <string name="result_risk">Сохранение фото с проблемами — на ваш риск: Госдепартамент может его отклонить.</string>
+    <string name="result_levels_checked">Строгость: %1$s</string>
+    <string name="result_levels_passes">Прошло бы при уровне: %1$s</string>
     <string name="result_specs">%1$d × %1$d px · %2$d КБ · JPEG</string>
     <string name="name_title">Имя и сохранение</string>
     <string name="name_all_ok">Все проверки пройдены</string>
@@ -143,6 +145,7 @@
     <string name="hint_edit_portrait">Портретный режим сглаживает и размывает — снимайте обычной камерой</string>
     <string name="hint_edit_software">Обработано в графическом редакторе — возьмите исходное фото</string>
     <string name="hint_age_old">Снято около %1$d мес. назад — нужно не старше 6 месяцев</string>
+    <string name="hint_age_near">Снято около %1$d мес. назад — слишком близко к пределу в 6 месяцев. Возьмите более свежее фото.</string>
     <string name="hint_age_unknown">Дата не найдена — фото должно быть снято за последние 6 месяцев</string>
     <string name="hint_age_future">Дата фото в будущем — проверьте часы на телефоне</string>
     <string name="hint_file_too_large">Файл больше 240 КБ</string>
@@ -161,6 +164,19 @@
     <string name="settings_disclaimer">Не связано с правительством США. Перед отправкой всегда проверяйте официальные требования.</string>
     <string name="settings_official">Официальные требования к фото</string>
     <string name="lang_system">Как в системе</string>
+    <string name="settings_strictness">Строгость проверки</string>
+    <string name="level_relaxed">Мягкая</string>
+    <string name="level_standard">Обычная</string>
+    <string name="level_strict">Строгая</string>
+    <string name="level_relaxed_sub">Ровно официальные пределы, в остальном проверки мягкие. Реже переснимать, но выше риск отказа.</string>
+    <string name="level_standard_sub">Официальные пределы и небольшой запас. Рекомендуем.</string>
+    <string name="level_strict_sub">Большой запас и жёсткие проверки; отредактированные фото и фото без даты не проходят. Лучшие шансы, больше пересъёмок.</string>
+    <string name="rules_sources_title">Откуда взяты правила</string>
+    <string name="rules_sources_intro">Правила устанавливает и окончательное решение принимает Госдепартамент США. Приложение лишь измеряет ваше фото, поэтому его проверки — это оценки.</string>
+    <string name="rules_origin_number">Официальное число</string>
+    <string name="rules_origin_words">Официальный текст</string>
+    <string name="rules_legend">Официальное число — его указывает Госдепартамент. Официальный текст — требование описано только словами, поэтому точные пределы выбрали мы сами.</string>
+    <string name="rules_stale">Эти правила проверялись %1$d мес. назад и могли измениться. Перед подачей заявки откройте официальную страницу.</string>
     <string name="help_title">Справка</string>
     <string name="help_rules_title">Правила</string>
     <string name="help_rules_1">Квадратное фото, %1$d–%2$d px, JPEG, не более %3$d КБ</string>

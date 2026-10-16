@@ -73,6 +73,8 @@
     <string name="result_auto_crop">We auto-cropped your photo to the right framing.</string>
     <string name="result_upload_note">We can’t see glasses, head coverings or retouching inside the pixels. Make sure the photo is recent and unedited.</string>
     <string name="result_risk">Saving a photo with problems is at your own risk — the State Department may reject it.</string>
+    <string name="result_levels_checked">Strictness: %1$s</string>
+    <string name="result_levels_passes">Would pass at: %1$s</string>
     <string name="result_specs">%1$d × %1$d px · %2$d KB · JPEG</string>
 
     <!-- Name and save -->
@@ -160,6 +162,7 @@
     <string name="hint_edit_portrait">Portrait mode smooths and blurs — use the normal camera</string>
     <string name="hint_edit_software">Edited in photo software — use the original photo</string>
     <string name="hint_age_old">Taken about %1$d months ago — must be within the last 6 months</string>
+    <string name="hint_age_near">Taken about %1$d months ago — too close to the 6-month limit. Use a newer photo.</string>
     <string name="hint_age_unknown">Date not found — it must be taken within the last 6 months</string>
     <string name="hint_age_future">Photo date is in the future — check your phone’s clock</string>
     <string name="hint_file_too_large">File is over 240 KB</string>
@@ -180,6 +183,21 @@
     <string name="settings_disclaimer">Not affiliated with the U.S. government. Always check the official instructions before you submit.</string>
     <string name="settings_official">Official photo requirements</string>
     <string name="lang_system">System default</string>
+    <string name="settings_strictness">Strictness</string>
+    <string name="level_relaxed">Relaxed</string>
+    <string name="level_standard">Standard</string>
+    <string name="level_strict">Strict</string>
+    <string name="level_relaxed_sub">Exactly the official limits, loose checks elsewhere. Fewer retakes, but a higher chance of rejection.</string>
+    <string name="level_standard_sub">Official limits plus a small safety margin. Recommended.</string>
+    <string name="level_strict_sub">Big safety margin and tight checks; edited or undated photos fail. Best odds, more retakes.</string>
+
+    <!-- Where the rules come from -->
+    <string name="rules_sources_title">Where the rules come from</string>
+    <string name="rules_sources_intro">The U.S. State Department sets the rules and makes the final decision. This app measures your photo, so its checks are estimates.</string>
+    <string name="rules_origin_number">Official number</string>
+    <string name="rules_origin_words">Official wording</string>
+    <string name="rules_legend">Official number: printed by the State Department. Official wording: required in words only, so the exact limits we use are our own.</string>
+    <string name="rules_stale">These rules were last checked %1$d months ago and may have changed. Open the official page before you enter.</string>
 
     <!-- Help -->
     <string name="help_title">Help</string>

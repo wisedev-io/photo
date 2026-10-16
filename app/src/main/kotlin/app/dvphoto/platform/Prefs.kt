@@ -29,6 +29,11 @@ class Prefs(context: Context) {
         get() = sp.getString("folder", "GALLERY") ?: "GALLERY"
         set(v) { sp.edit().putString("folder", v).apply() }
 
+    /** [app.dvphoto.core.Strictness.id] of the chosen level; "" until the user picks one. */
+    var strictness: String
+        get() = sp.getString("strictness", "") ?: ""
+        set(v) { sp.edit().putString("strictness", v).apply() }
+
     var preferFront: Boolean
         get() = sp.getBoolean("preferFront", true)
         set(v) { sp.edit().putBoolean("preferFront", v).apply() }

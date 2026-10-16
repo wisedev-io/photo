@@ -21,7 +21,7 @@ object HeadTopFinder {
         src: PixelSource, fx: Int, fy: Int, side: Int, r: FaceReading,
         bgLuma: Float, bgStd: Float, gradX: Float = 0f, gradY: Float = 0f,
     ): Float? {
-        if (bgLuma < 150f || bgStd > DvRules.BG_STD_MAX * 1.5f) return null
+        if (bgLuma < 150f || bgStd > DvRules.HEAD_TOP_MAX_BG_STD) return null
         val faceH = r.headHeight / (1f + DvRules.HEAD_TOP_EXTENSION)
         if (faceH <= 0.05f) return null
         val ovalTop = r.chin - faceH

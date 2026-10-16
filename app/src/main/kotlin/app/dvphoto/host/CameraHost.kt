@@ -149,6 +149,7 @@ private fun LiveCamera(vm: AppViewModel) {
             autoCapture = vm.autoCapture && liveAnalysis,
             showMeasurements = vm.measurements && liveAnalysis,
             manualOnly = !liveAnalysis,
+            strictness = vm.strictness,
             onClose = vm::goHome,
             onFlip = vm::flipCamera,
             onShutter = vm::requestShutter,
