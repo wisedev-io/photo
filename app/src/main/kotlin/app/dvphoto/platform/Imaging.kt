@@ -17,6 +17,7 @@ import app.dvphoto.core.CivilDate
 import app.dvphoto.core.Dates
 import app.dvphoto.core.DvRules
 import app.dvphoto.core.MetadataScanner
+import app.dvphoto.core.PhotoSize
 import app.dvphoto.core.PixelSource
 import java.io.ByteArrayOutputStream
 import kotlin.math.max
@@ -59,7 +60,7 @@ object PhotoExporter {
     }
 
     /** Output side for a crop of [cropSide] pixels: as large as allowed up to the target, never upscaled. */
-    fun outputSide(cropSide: Int): Int = min(cropSide, DvRules.OUTPUT_TARGET_SIDE).coerceAtLeast(1)
+    fun outputSide(cropSide: Int): Int = PhotoSize.outputSide(cropSide)
 
     /** Encodes a square bitmap as a metadata-free JPEG within the DV size limits (shrinking only if needed). */
     fun encode(square: Bitmap): Encoded {

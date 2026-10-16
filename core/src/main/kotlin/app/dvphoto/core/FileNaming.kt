@@ -64,6 +64,15 @@ object FileNaming {
     /** True when the name only has English letters, digits and . _ - ( ) space - the safest set for web uploads. */
     fun isAsciiSafe(name: String): Boolean = name.all { it.code < 128 }
 
+    /**
+     * The first role whose default file name is not taken yet: applicant, then spouse, then each child.
+     * Gives the natural order when a family saves several photos in a row; [PhotoRole.OTHER] when all are used.
+     */
+    fun nextRole(existing: Collection<String>): PhotoRole {
+        val taken = existing.map { it.lowercase() }.toHashSet()
+        return PhotoRole.values().firstOrNull { fileName(it.base).lowercase() !in taken } ?: PhotoRole.OTHER
+    }
+
     /** Picks "name", "name (1)", "name (2)"... so that it does not clash with [existing] file names. */
     fun unique(base: String, existing: Collection<String>): String {
         val taken = existing.map { it.lowercase() }.toHashSet()

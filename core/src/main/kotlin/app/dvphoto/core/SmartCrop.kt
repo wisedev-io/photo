@@ -49,3 +49,9 @@ object SmartCrop {
         return SquareCrop((imgW - s) / 2, (imgH - s) / 2, s, false)
     }
 }
+
+/** Pure size rules shared by the app and its tests. */
+object PhotoSize {
+    /** Output side for a crop of [cropSide] pixels: as large as allowed up to the target, never upscaled. */
+    fun outputSide(cropSide: Int): Int = minOf(cropSide, DvRules.OUTPUT_TARGET_SIDE).coerceAtLeast(1)
+}

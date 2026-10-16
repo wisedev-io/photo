@@ -44,19 +44,29 @@ class LiveAnalyzer(
         val plane = image.planes[0]
         val luma = YPlane(plane.buffer, plane.rowStride, image.width, image.height, rot)
 
-        detector.process(InputImage.fromMediaImage(media, rot))
-            .addOnSuccessListener { faces ->
-                val face = MlKit.largest(faces)
-                val rawFace = face?.let { MlKit.toRaw(it) }
-                if (rawFace == null || side <= 0) {
-                    onFrame(LiveFrame(null, null))
-                } else {
-                    val r = FaceGeometry.reading(rawFace, square.left.toFloat(), square.top.toFloat(), side.toFloat(), faces.size)
-                    val result = SceneAnalyzer.analyze(luma, square.left, square.top, side, r, withSharpness = false)
-                    onFrame(LiveFrame(result.reading, result.stats))
+        try {
+            detector.process(InputImage.fromMediaImage(media, rot))
+                .addOnSuccessListener { faces ->
+                    // an exception here would crash the app (it runs on the main looper): degrade to "no face"
+                    val frame = try {
+                        val rawFace = MlKit.largest(faces)?.let { MlKit.toRaw(it) }
+                        if (rawFace == null || side <= 0) {
+                            LiveFrame(null, null)
+                        } else {
+                            val r = FaceGeometry.reading(rawFace, square.left.toFloat(), square.top.toFloat(), side.toFloat(), faces.size)
+                            val result = SceneAnalyzer.analyze(luma, square.left, square.top, side, r, withSharpness = false)
+                            LiveFrame(result.reading, result.stats)
+                        }
+                    } catch (t: Throwable) {
+                        LiveFrame(null, null)
+                    }
+                    onFrame(frame)
                 }
-            }
-            .addOnCompleteListener { image.close() }
+                .addOnCompleteListener { image.close() }
+        } catch (t: Throwable) {
+            // never leave a frame open: the camera would stop delivering new ones
+            image.close()
+        }
     }
 
     private companion object { const val MIN_INTERVAL_MS = 150L }

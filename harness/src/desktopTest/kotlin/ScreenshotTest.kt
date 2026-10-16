@@ -8,6 +8,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.unit.dp
 import app.dvphoto.core.Check
 import app.dvphoto.core.CheckId
 import app.dvphoto.core.FaceReading
@@ -186,5 +188,37 @@ class LanguageScreenshotTest {
             shot("settings", 1250) { SettingsScreen(settings, {}, {}, {}, {}, {}, {}) }
             shot("help", 2500) { HelpScreen({}, {}, {}) }
         }
+    }
+}
+
+/** Every hint and every check title must exist and format correctly in every language. */
+class AllHintsTest {
+    @Test fun everyHintRendersInEveryLanguage() {
+        val all = Hint.values().mapIndexed { i, h ->
+            val id = CheckId.values()[i % CheckId.values().size]
+            Check(id, if (h == Hint.OK) Status.PASS else Status.FAIL, h, if (h == Hint.AGE_OLD) 8f else 0.6f)
+        }
+        for (lang in listOf<String?>(null, "ru", "uz", "es", "fr", "pt", "tr", "ar", "bn")) {
+            val f = Harness.render("allhints", lang, heightDp = 3300, rtl = lang == "ar") {
+                androidx.compose.foundation.layout.Column(Modifier.padding(16.dp)) { ChecksCard(all) }
+            }
+            assertTrue(Harness.inkRatio(f) > 0.02)
+        }
+        // each check id has a title too
+        Harness.render("allchecks", null, heightDp = 1400) {
+            androidx.compose.foundation.layout.Column(Modifier.padding(16.dp)) {
+                ChecksCard(CheckId.values().map { Check(it, Status.PASS, Hint.OK) })
+            }
+        }
+    }
+
+    @Test fun discardSheetAndBusy() {
+        val f = Harness.render("discard") {
+            Box(Modifier.fillMaxSize()) {
+                HelpScreen({}, {}, {})
+                ConfirmSheet("Discard this photo?", "You haven’t saved it yet. If you leave now it will be deleted.", "Discard", "Keep editing", {}, {})
+            }
+        }
+        assertTrue(Harness.inkRatio(f) > 0.02)
     }
 }

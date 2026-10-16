@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import app.dvphoto.core.CaptureGate
 import app.dvphoto.core.Check
 import app.dvphoto.core.CheckId
 import app.dvphoto.core.Hint
@@ -124,8 +125,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     var shutterTick by mutableIntStateOf(0); private set
 
     private var shutterBusy = false
-    private var passSince = 0L
-    private var prev: FaceReading? = null
+    private val gate = CaptureGate()
 
     private val liveLazy = lazy { FaceDetection.getClient(MlKit.measureOptions(accurate = false)) }
     private val measureLazy = lazy { FaceDetection.getClient(MlKit.measureOptions(accurate = true)) }
@@ -161,14 +161,14 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     fun back(): Boolean = when (screen) {
         Screen.Home -> false
         is Screen.Busy -> true
-        is Screen.Name -> { confirmDiscard = true; true }
+        is Screen.Name -> { confirmDiscard = !confirmDiscard; true } // a second back dismisses the question
         else -> { goHome(); true }
     }
 
     fun dismissDiscard() { confirmDiscard = false }
 
     private fun resetLive() {
-        shutterBusy = false; passSince = 0L; prev = null; live = LiveUi()
+        shutterBusy = false; gate.reset(); live = LiveUi()
     }
 
     // ===========================================================================================
@@ -196,17 +196,11 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         val checks = Validator.validate(f.reading, f.scene, null, mirrored)
         val r = f.reading
         val ok = r != null && checks.none { it.status == Status.FAIL }
-        val now = SystemClock.elapsedRealtime()
-        if (!ok || r == null) passSince = 0L
-        else if (passSince == 0L || !steady(prev, r)) passSince = now
-        prev = r
-        val progress = if (passSince == 0L || !autoCapture) 0f else ((now - passSince) / HOLD_MS.toFloat()).coerceIn(0f, 1f)
-        live = LiveUi(r, checks, progress, f.scene)
-        if (progress >= 1f && briefed) requestShutter()
+        val progress = gate.update(r, ok, SystemClock.elapsedRealtime())
+        val shown = if (autoCapture) progress else 0f
+        live = LiveUi(r, checks, shown, f.scene)
+        if (shown >= 1f && briefed) requestShutter()
     }
-
-    private fun steady(a: FaceReading?, b: FaceReading) = a != null &&
-        abs(a.centerX - b.centerX) < 0.02f && abs(a.headTop - b.headTop) < 0.02f && abs(a.chin - b.chin) < 0.02f
 
     fun requestShutter() {
         if (shutterBusy) return
@@ -214,7 +208,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         shutterTick++
     }
 
-    fun onCaptureFailed() { shutterBusy = false; passSince = 0L; message = R.string.err_capture }
+    fun onCaptureFailed() { shutterBusy = false; gate.reset(); message = R.string.err_capture }
 
     /** Takes ownership of [image] (always closed). */
     fun onCaptured(image: ImageProxy) {
@@ -373,8 +367,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
             existing = names
             if (pickNextRole && !nameTouched) {
                 // family flow: suggest the first role whose file does not exist yet
-                val lower = names.map { it.lowercase() }.toSet()
-                val next = PhotoRole.values().firstOrNull { FileNaming.fileName(it.base).lowercase() !in lower } ?: PhotoRole.OTHER
+                val next = FileNaming.nextRole(names)
                 role = next
                 nameText = next.base
             }
@@ -482,5 +475,4 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         if (countLazy.isInitialized()) runCatching { countDetector.close() }
     }
 
-    private companion object { const val HOLD_MS = 1200L }
 }

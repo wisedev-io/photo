@@ -5,6 +5,11 @@ Android app (Kotlin, Jetpack Compose, CameraX, ML Kit) that helps you take or ch
 
 Everything runs on the phone. No account, no upload, no backend. Not affiliated with the U.S. government.
 
+![Overview](docs/screenshots/overview.png)
+
+*Rendered headlessly from the app's real Compose code with a synthetic portrait (see `harness/`). The same screen in
+nine languages: ![Languages](docs/screenshots/languages.png)*
+
 ## What it does
 
 | | |
