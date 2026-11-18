@@ -14,7 +14,7 @@
     <string name="action_retake">Зробити фото знову</string>
     <string name="action_pick_other">Вибрати інше фото</string>
     <string name="action_another">Додати ще одне фото</string>
-    <string name="home_tagline">Фото, що відповідають правилам лотереї DV.</string>
+    <string name="home_tagline">Робіть фото паспортного формату</string>
     <string name="home_take">Зробити фото</string>
     <string name="home_take_sub">Підказки наживо, автозйомка, без фільтрів</string>
     <string name="home_upload">Перевірити готове фото</string>
