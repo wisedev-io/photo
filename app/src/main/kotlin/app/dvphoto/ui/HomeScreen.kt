@@ -64,8 +64,8 @@ fun HomeScreen(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                stringResource(R.string.app_name).uppercase(), color = Pal.Mint, fontSize = 14.sp,
-                fontWeight = FontWeight.Bold, letterSpacing = 2.sp, modifier = Modifier.weight(1f),
+                stringResource(R.string.app_name), color = Pal.Text, fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f),
             )
             CircleButton(stringResource(R.string.help_title), onHelp) {
                 Text("?", color = Pal.Text, fontSize = 18.sp, fontWeight = FontWeight.Bold)
@@ -77,21 +77,21 @@ fun HomeScreen(
         }
 
         Text(
-            stringResource(R.string.home_tagline), color = Pal.Text, fontSize = 30.sp,
-            fontWeight = FontWeight.ExtraBold, lineHeight = 35.sp,
+            stringResource(R.string.home_tagline), color = Pal.Text, fontSize = 36.sp,
+            fontWeight = FontWeight.Medium, lineHeight = 40.sp,
         )
 
         // Hero: the main action. The text keeps clear of the artwork and the card grows with long translations.
         Box(
             Modifier.fillMaxWidth().heightIn(min = 200.dp).clip(RoundedCornerShape(32.dp))
-                .background(Brush.linearGradient(listOf(Color(0xFF4B5BFF), Color(0xFF16B8A0))))
+                .background(Brush.linearGradient(listOf(Pal.MintPanel, Color(0xFFDFF9F1), Pal.Lavender)))
                 .clickable(role = Role.Button, onClick = onCamera),
         ) {
             HeroArt(Modifier.align(Alignment.CenterEnd).size(130.dp).padding(end = 12.dp))
             Column(Modifier.align(Alignment.BottomStart).padding(start = 24.dp, top = 24.dp, bottom = 24.dp, end = 150.dp)) {
-                Text(stringResource(R.string.home_take), color = Color.White, fontSize = 26.sp, fontWeight = FontWeight.ExtraBold, lineHeight = 30.sp)
+                Text(stringResource(R.string.home_take), color = Pal.Text, fontSize = 26.sp, fontWeight = FontWeight.SemiBold, lineHeight = 30.sp)
                 Text(
-                    stringResource(R.string.home_take_sub), color = Color.White.copy(alpha = 0.88f),
+                    stringResource(R.string.home_take_sub), color = Pal.Muted,
                     fontSize = 14.sp, lineHeight = 19.sp, modifier = Modifier.padding(top = 4.dp),
                 )
             }
@@ -99,12 +99,12 @@ fun HomeScreen(
 
         // Secondary: upload an existing photo
         Row(
-            Modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp)).background(Pal.Surface2)
+            Modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp)).background(Pal.Lavender)
                 .clickable(role = Role.Button, onClick = onUpload).padding(18.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
-                Modifier.size(44.dp).clip(CircleShape).background(Pal.Indigo.copy(alpha = 0.2f)),
+                Modifier.size(44.dp).clip(CircleShape).background(Pal.Surface),
                 contentAlignment = Alignment.Center,
             ) { Icon(Icons.Default.Add, null, tint = Pal.Indigo) }
             Column(Modifier.padding(start = 14.dp)) {
@@ -162,7 +162,7 @@ private fun Step(number: Int, text: Int, modifier: Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
-        Box(Modifier.size(24.dp).clip(CircleShape).background(Pal.Mint.copy(alpha = 0.18f)), contentAlignment = Alignment.Center) {
+        Box(Modifier.size(24.dp).clip(CircleShape).background(Pal.MintPanel), contentAlignment = Alignment.Center) {
             Text("$number", color = Pal.Mint, fontSize = 12.sp, fontWeight = FontWeight.Bold)
         }
         Text(
@@ -185,14 +185,15 @@ private fun HeroArt(modifier: Modifier) {
     Canvas(modifier) {
         val w = size.width
         val stroke = Stroke(width = 3.dp.toPx(), cap = StrokeCap.Round)
-        val c = Color.White.copy(alpha = 0.9f)
-        drawOval(c, Offset(w * 0.3f, w * 0.05f), Size(w * 0.4f, w * 0.52f), style = stroke)
+        val c = Pal.Ink.copy(alpha = 0.8f)
+        drawCircle(Color.White.copy(alpha = 0.68f), radius = w * 0.46f, center = Offset(w * 0.5f, w * 0.52f))
+        drawOval(c, Offset(w * 0.36f, w * 0.22f), Size(w * 0.28f, w * 0.36f), style = stroke)
         val shoulders = Path().apply {
-            moveTo(w * 0.08f, w)
-            cubicTo(w * 0.1f, w * 0.78f, w * 0.3f, w * 0.7f, w * 0.5f, w * 0.7f)
-            cubicTo(w * 0.7f, w * 0.7f, w * 0.9f, w * 0.78f, w * 0.92f, w)
+            moveTo(w * 0.23f, w * 0.8f)
+            cubicTo(w * 0.27f, w * 0.68f, w * 0.39f, w * 0.64f, w * 0.5f, w * 0.64f)
+            cubicTo(w * 0.61f, w * 0.64f, w * 0.73f, w * 0.68f, w * 0.77f, w * 0.8f)
         }
         drawPath(shoulders, c, style = stroke)
-        drawLine(c.copy(alpha = 0.6f), Offset(w * 0.2f, w * 0.28f), Offset(w * 0.8f, w * 0.28f), strokeWidth = 2.dp.toPx())
+        drawLine(c.copy(alpha = 0.6f), Offset(w * 0.27f, w * 0.39f), Offset(w * 0.73f, w * 0.39f), strokeWidth = 2.dp.toPx())
     }
 }
