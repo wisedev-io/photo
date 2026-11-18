@@ -10,8 +10,8 @@
       "apkFile": "${workspaceFolder}/app/build/outputs/apk/debug/app-debug.apk",
       "launchActivity": "app.dvphoto.MainActivity",
       "adbSocket": "localhost:5037",
-      "autoStartADB": false,
-      "staleBuild": "stop"
+      "autoStartADB": true,
+      "staleBuild": "warn"
     }
   ]
 }
