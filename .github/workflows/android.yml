@@ -11,7 +11,7 @@ jobs:
   # Fast checks that need no Android SDK: rules engine, strings/translations, Compose screens rendered headlessly,
   # and a compile of the Android-specific code against stubs.
   logic:
-    if: github.event.action != 'closed' || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'develop' && github.event.pull_request.head.repo.full_name == github.repository && vars.DV_PHOTO_PLAY_RELEASE_ENABLED == 'true')
+    if: github.event.action != 'closed' || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && vars.DV_PHOTO_PLAY_RELEASE_ENABLED == 'true')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -42,7 +42,7 @@ jobs:
 
   # The real thing: needs the Android SDK.
   android:
-    if: github.event.action != 'closed' || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'develop' && github.event.pull_request.head.repo.full_name == github.repository && vars.DV_PHOTO_PLAY_RELEASE_ENABLED == 'true')
+    if: github.event.action != 'closed' || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && vars.DV_PHOTO_PLAY_RELEASE_ENABLED == 'true')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -58,7 +58,7 @@ jobs:
           yes | "$SDKMANAGER" --licenses > /dev/null || true
       - uses: gradle/actions/setup-gradle@v4
       - name: Assign Play version
-        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'develop' && github.event.pull_request.head.repo.full_name == github.repository && vars.DV_PHOTO_PLAY_RELEASE_ENABLED == 'true'
+        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && vars.DV_PHOTO_PLAY_RELEASE_ENABLED == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -97,7 +97,7 @@ jobs:
 
       - name: Sign the Play upload bundle
         id: sign
-        if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'develop' && github.event.pull_request.head.repo.full_name == github.repository && vars.DV_PHOTO_PLAY_RELEASE_ENABLED == 'true')
+        if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && vars.DV_PHOTO_PLAY_RELEASE_ENABLED == 'true')
         env:
           PLAY_UPLOAD_KEYSTORE_BASE64: ${{ secrets.PLAY_UPLOAD_KEYSTORE_BASE64 }}
           PLAY_UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.PLAY_UPLOAD_KEYSTORE_PASSWORD }}
@@ -130,11 +130,11 @@ jobs:
           path: ${{ runner.temp }}/dv-photo-play.aab
           if-no-files-found: error
 
-  # Merge feature branches into develop. Release by merging a develop-to-main pull request.
+  # Merge feature branches into develop. Any pull request merged into main can release.
   # Configure DV_PHOTO_PLAY_SERVICE_ACCOUNT_JSON with production access for app.dvphoto.camera.
   # Enable DV_PHOTO_PLAY_RELEASE_ENABLED once that secret and the existing upload key are configured.
   play-release:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'develop' && github.event.pull_request.head.repo.full_name == github.repository && vars.DV_PHOTO_PLAY_RELEASE_ENABLED == 'true'
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && vars.DV_PHOTO_PLAY_RELEASE_ENABLED == 'true'
     needs: [logic, android]
     runs-on: ubuntu-latest
     timeout-minutes: 15
