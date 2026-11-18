@@ -3,6 +3,9 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   # Fast checks that need no Android SDK: rules engine, strings/translations, Compose screens rendered headlessly,
   # and a compile of the Android-specific code against stubs.
@@ -51,6 +54,14 @@ jobs:
           SDKMANAGER="$(command -v sdkmanager || ls "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager | tail -n 1)"
           yes | "$SDKMANAGER" --licenses > /dev/null || true
       - uses: gradle/actions/setup-gradle@v4
+      - name: Assign Play version
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.DV_PHOTO_PLAY_RELEASE_ENABLED == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          version_code=$((2 + GITHUB_RUN_NUMBER))
+          sed -i -E "s/^[[:space:]]*versionCode = [0-9]+$/        versionCode = $version_code/" app/build.gradle.kts
+          grep -Fx "        versionCode = $version_code" app/build.gradle.kts
       - name: Unit tests, debug APK, and release bundle
         run: ./gradlew :core:test :app:assembleDebug :app:bundleRelease
       - name: Android lint (errors fail the build, warnings do not)
@@ -115,3 +126,32 @@ jobs:
           name: dv-photo-play-aab
           path: ${{ runner.temp }}/dv-photo-play.aab
           if-no-files-found: error
+
+  # Configure DV_PHOTO_PLAY_SERVICE_ACCOUNT_JSON with production access for app.dvphoto.camera.
+  # Enable DV_PHOTO_PLAY_RELEASE_ENABLED once that secret and the existing upload key are configured.
+  play-release:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.DV_PHOTO_PLAY_RELEASE_ENABLED == 'true'
+    needs: [logic, android]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: dv-photo-google-play-production
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: dv-photo-play-aab
+          path: play-release
+      - name: Require current main
+        shell: bash
+        run: test "$(git ls-remote origin refs/heads/main | cut -f1)" = "$GITHUB_SHA"
+      - name: Submit production update for Google review
+        uses: r0adkll/upload-google-play@e738b9dd8f2476ea806d921b64aacd24f34515a5
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.DV_PHOTO_PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: app.dvphoto.camera
+          releaseFiles: play-release/dv-photo-play.aab
+          tracks: production
+          status: completed
+          changesNotSentForReview: false
