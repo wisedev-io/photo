@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
@@ -150,7 +151,17 @@ fun HomeScreen(
         }
 
         Spacer(Modifier.height(4.dp))
-        Text(stringResource(R.string.home_privacy), color = Pal.Muted, fontSize = 12.sp, lineHeight = 17.sp)
+        val uriHandler = LocalUriHandler.current
+        Text(
+            stringResource(R.string.home_privacy),
+            color = Pal.Mint,
+            fontSize = 12.sp,
+            lineHeight = 17.sp,
+            textDecoration = androidx.compose.ui.text.style.TextDecoration.Underline,
+            modifier = Modifier.clickable(role = Role.Button) {
+                uriHandler.openUri("https://github.com/wisedev-io/photo/blob/main/PRIVACY.md")
+            }.padding(vertical = 12.dp),
+        )
         Spacer(Modifier.height(12.dp))
     }
 }
