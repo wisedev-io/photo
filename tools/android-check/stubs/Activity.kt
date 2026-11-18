@@ -9,6 +9,7 @@ inline fun <reified VM : ViewModel> ComponentActivity.viewModels(): Lazy<VM> = l
 class SystemBarStyle private constructor() {
     companion object {
         fun dark(scrim: Int): SystemBarStyle = SystemBarStyle()
+        fun light(scrim: Int, darkScrim: Int): SystemBarStyle = SystemBarStyle()
     }
 }
 
