@@ -14,7 +14,7 @@
     <string name="action_retake">إعادة التقاط الصورة</string>
     <string name="action_pick_other">اختيار صورة أخرى</string>
     <string name="action_another">إضافة صورة أخرى</string>
-    <string name="home_tagline">صور تستوفي شروط قرعة DV.</string>
+    <string name="home_tagline">التقط صورًا بحجم صورة جواز السفر</string>
     <string name="home_take">التقاط صورة</string>
     <string name="home_take_sub">إرشادات مباشرة، التقاط تلقائي، بلا فلاتر</string>
     <string name="home_upload">فحص صورة موجودة</string>
