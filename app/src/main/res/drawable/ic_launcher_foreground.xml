@@ -2,13 +2,10 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp" android:height="108dp"
     android:viewportWidth="108" android:viewportHeight="108">
-    <!-- head oval -->
-    <path android:strokeColor="#3DDC97" android:strokeWidth="4"
-        android:pathData="M54,30 m-15,0 a15,19 0 1,0 30,0 a15,19 0 1,0 -30,0" />
-    <!-- shoulders -->
-    <path android:strokeColor="#3DDC97" android:strokeWidth="4" android:strokeLineCap="round"
-        android:pathData="M30,84 C32,70 44,67 54,67 C64,67 76,70 78,84" />
-    <!-- eye line -->
-    <path android:strokeColor="#FFFFFF" android:strokeWidth="2.5" android:strokeLineCap="round"
-        android:pathData="M45,45 L63,45" />
+    <path android:strokeColor="#142924" android:strokeWidth="3.5"
+        android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:pathData="M30,44 V35 Q30,30 35,30 H44 M64,30 H73 Q78,30 78,35 V44 M78,64 V73 Q78,78 73,78 H64 M44,78 H35 Q30,78 30,73 V64" />
+    <path android:strokeColor="#142924" android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:pathData="M54,40 C60,40 63,45 63,51 C63,57 59,61 54,61 C49,61 45,57 45,51 C45,45 48,40 54,40 M41,70 C44,66 49,65 54,65 C59,65 64,66 67,70" />
 </vector>
