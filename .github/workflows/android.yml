@@ -51,10 +51,10 @@ jobs:
           SDKMANAGER="$(command -v sdkmanager || ls "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager | tail -n 1)"
           yes | "$SDKMANAGER" --licenses > /dev/null || true
       - uses: gradle/actions/setup-gradle@v4
-      - name: Unit tests + debug APK
-        run: ./gradlew :core:test :app:assembleDebug
+      - name: Unit tests, debug APK, and release bundle
+        run: ./gradlew :core:test :app:assembleDebug :app:bundleRelease
       - name: Android lint (errors fail the build, warnings do not)
-        run: ./gradlew :app:lintDebug
+        run: ./gradlew :app:lintDebug :app:lintRelease
       - name: Lint findings (text)
         if: always()
         run: cat app/build/intermediates/lint_intermediate_text_report/debug/lintReportDebug/lint-results-debug.txt || true
@@ -75,3 +75,8 @@ jobs:
         with:
           name: dv-photo-debug-apk
           path: app/build/outputs/apk/debug/*.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dv-photo-unsigned-release-aab
+          path: app/build/outputs/bundle/release/*.aab
+          if-no-files-found: error
