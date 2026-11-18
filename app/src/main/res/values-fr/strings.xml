@@ -14,7 +14,7 @@
     <string name="action_retake">Reprendre la photo</string>
     <string name="action_pick_other">Choisir une autre photo</string>
     <string name="action_another">Ajouter une autre photo</string>
-    <string name="home_tagline">Des photos conformes aux règles de la loterie DV.</string>
+    <string name="home_tagline">Prenez des photos au format passeport</string>
     <string name="home_take">Prendre une photo</string>
     <string name="home_take_sub">Guidage en direct, prise automatique, sans filtres</string>
     <string name="home_upload">Vérifier une photo existante</string>

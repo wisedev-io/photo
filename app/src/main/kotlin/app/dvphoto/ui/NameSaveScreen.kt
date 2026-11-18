@@ -170,7 +170,7 @@ fun NameSaveScreen(
 
     // Always-visible actions: the user never has to scroll to find "Save"
     Column(
-        Modifier.fillMaxWidth().background(Pal.Ink).padding(horizontal = 20.dp, vertical = 10.dp),
+        Modifier.fillMaxWidth().background(Pal.Canvas).padding(horizontal = 20.dp, vertical = 10.dp),
         verticalArrangement = Arrangement.spacedBy(2.dp),
     ) {
         name.errorRes?.let { Text(stringResource(it), color = Pal.Coral, fontSize = 13.sp, modifier = Modifier.padding(bottom = 6.dp)) }

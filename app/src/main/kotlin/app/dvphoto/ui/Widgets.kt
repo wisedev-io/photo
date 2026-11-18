@@ -71,7 +71,7 @@ fun AppButton(
     val bg: Color
     val fg: Color
     when (style) {
-        BtnStyle.Primary -> { bg = Pal.Mint; fg = Pal.Ink }
+        BtnStyle.Primary -> { bg = Pal.Ink; fg = Color.White }
         BtnStyle.Secondary -> { bg = Pal.Surface2; fg = Pal.Text }
         BtnStyle.Ghost -> { bg = Color.Transparent; fg = Pal.Muted }
         BtnStyle.Danger -> { bg = Pal.Coral.copy(alpha = 0.16f); fg = Pal.Coral }
@@ -80,7 +80,7 @@ fun AppButton(
     Row(
         modifier
             .heightIn(min = if (style == BtnStyle.Ghost) 44.dp else 54.dp)
-            .clip(RoundedCornerShape(18.dp))
+            .clip(RoundedCornerShape(28.dp))
             .background(bg.copy(alpha = bg.alpha * a))
             .clickable(enabled = enabled, role = Role.Button, onClick = onClick)
             .padding(horizontal = 20.dp, vertical = 12.dp),
@@ -105,7 +105,7 @@ fun CircleButton(description: String, onClick: () -> Unit, modifier: Modifier = 
         modifier
             .size(48.dp)
             .clip(CircleShape)
-            .background(Pal.Surface2)
+            .background(Pal.Surface)
             .semantics { contentDescription = description }
             .clickable(role = Role.Button, onClick = onClick),
         contentAlignment = Alignment.Center,
@@ -186,7 +186,7 @@ fun Pill(text: String, color: Color, modifier: Modifier = Modifier) {
 @Composable
 fun Toggle(checked: Boolean, onChange: (Boolean) -> Unit, modifier: Modifier = Modifier) {
     val x by animateDpAsState(if (checked) 24.dp else 3.dp, tween(160), label = "knob")
-    val bg by animateColorAsState(if (checked) Pal.Mint else Pal.Surface2, tween(160), label = "track")
+    val bg by animateColorAsState(if (checked) Pal.MintPanel else Pal.Surface2, tween(160), label = "track")
     Box(
         modifier
             .size(width = 58.dp, height = 48.dp)
@@ -244,13 +244,13 @@ fun <T> Segmented(
                 Modifier
                     .weight(1f)
                     .clip(RoundedCornerShape(12.dp))
-                    .background(if (on) Pal.Mint else Color.Transparent)
+                    .background(if (on) Pal.MintPanel else Color.Transparent)
                     .clickable(role = Role.RadioButton) { onSelect(value) }
                     .padding(vertical = 11.dp, horizontal = 6.dp),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
-                    label, color = if (on) Pal.Ink else Pal.Text, fontSize = 14.sp,
+                    label, color = Pal.Text, fontSize = 14.sp,
                     fontWeight = if (on) FontWeight.Bold else FontWeight.Medium,
                     textAlign = TextAlign.Center, maxLines = 1, overflow = TextOverflow.Ellipsis,
                 )
@@ -264,14 +264,14 @@ fun <T> Segmented(
 fun ChoiceChip(text: String, selected: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Text(
         text,
-        color = if (selected) Pal.Ink else Pal.Text,
+        color = Pal.Text,
         fontSize = 14.sp,
         fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
         maxLines = 1,
         modifier = modifier
             .heightIn(min = 44.dp)
             .clip(RoundedCornerShape(50))
-            .background(if (selected) Pal.Mint else Pal.Surface2)
+            .background(if (selected) Pal.MintPanel else Pal.Surface2)
             .clickable(role = Role.RadioButton, onClick = onClick)
             .padding(horizontal = 16.dp, vertical = 10.dp),
     )
@@ -280,7 +280,7 @@ fun ChoiceChip(text: String, selected: Boolean, onClick: () -> Unit, modifier: M
 /** Centres [content] and caps its width so phones, tablets and foldables all look right. */
 @Composable
 fun ScreenFrame(content: @Composable () -> Unit) {
-    Box(Modifier.fillMaxSize().background(Pal.Ink), contentAlignment = Alignment.TopCenter) {
+    Box(Modifier.fillMaxSize().background(Pal.Backdrop), contentAlignment = Alignment.TopCenter) {
         Box(Modifier.widthIn(max = MaxContentWidth).fillMaxSize()) { content() }
     }
 }

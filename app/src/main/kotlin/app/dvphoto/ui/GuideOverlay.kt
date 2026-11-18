@@ -39,7 +39,7 @@ fun GuideOverlay(
     eyeBand: ClosedFloatingPointRange<Float> = DvRules.EYE_MIN..DvRules.EYE_MAX,
 ) {
     val color by animateColorAsState(
-        when (tone) { Tone.NONE -> Color.White.copy(alpha = 0.7f); Tone.ADJUST -> Pal.Amber; Tone.GOOD -> Pal.Mint },
+        when (tone) { Tone.NONE -> Color.White.copy(alpha = 0.7f); Tone.ADJUST -> Pal.Lemon; Tone.GOOD -> Pal.MintPanel },
         tween(250), label = "tone",
     )
     val r = reading

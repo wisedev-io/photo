@@ -14,7 +14,7 @@
     <string name="action_retake">Переснять</string>
     <string name="action_pick_other">Выбрать другое фото</string>
     <string name="action_another">Добавить ещё фото</string>
-    <string name="home_tagline">Фото, которое пройдёт правила DV-лотереи.</string>
+    <string name="home_tagline">Делайте фото паспортного формата</string>
     <string name="home_take">Сделать фото</string>
     <string name="home_take_sub">Подсказки в реальном времени, автосъёмка, без фильтров</string>
     <string name="home_upload">Проверить готовое фото</string>

@@ -14,7 +14,7 @@
     <string name="action_retake">আবার তুলুন</string>
     <string name="action_pick_other">অন্য ছবি বেছে নিন</string>
     <string name="action_another">আরেকটি ছবি যোগ করুন</string>
-    <string name="home_tagline">ডিভি লটারির নিয়মে উতরে যাওয়া ছবি।</string>
+    <string name="home_tagline">পাসপোর্ট সাইজের ছবি তুলুন</string>
     <string name="home_take">ছবি তুলুন</string>
     <string name="home_take_sub">সরাসরি নির্দেশনা, স্বয়ংক্রিয় ছবি তোলা, কোনো ফিল্টার নয়</string>
     <string name="home_upload">তোলা ছবি যাচাই করুন</string>

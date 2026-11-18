@@ -14,7 +14,7 @@
     <string name="action_retake">گرفتن دوباره عکس</string>
     <string name="action_pick_other">انتخاب عکس دیگر</string>
     <string name="action_another">افزودن عکس دیگر</string>
-    <string name="home_tagline">عکس‌هایی مطابق قوانین لاتاری گرین کارت (DV).</string>
+    <string name="home_tagline">عکس در اندازه گذرنامه بگیرید</string>
     <string name="home_take">گرفتن عکس</string>
     <string name="home_take_sub">راهنمایی لحظه‌ای، گرفتن خودکار عکس، بدون فیلتر</string>
     <string name="home_upload">بررسی عکسی که دارید</string>

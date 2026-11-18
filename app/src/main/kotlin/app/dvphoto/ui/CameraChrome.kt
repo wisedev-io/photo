@@ -88,7 +88,7 @@ fun CameraChrome(
 ) {
     val tone = toneOf(live)
     val pillColor by animateColorAsState(
-        when (tone) { Tone.GOOD -> Pal.Mint; Tone.ADJUST -> Pal.Amber; Tone.NONE -> Pal.Surface2 }, tween(250), label = "pill",
+        when (tone) { Tone.GOOD -> Pal.MintPanel; Tone.ADJUST -> Pal.Lemon; Tone.NONE -> Pal.Surface2 }, tween(250), label = "pill",
     )
     Column(Modifier.fillMaxSize()) {
         Column(
@@ -135,7 +135,7 @@ fun CameraChrome(
                 }
                 // a constant reminder that nothing is being filtered or edited
                 Text(
-                    "✓ " + stringResource(R.string.cam_nofilters), color = Pal.Mint, fontSize = 11.sp, fontWeight = FontWeight.Bold,
+                    "✓ " + stringResource(R.string.cam_nofilters), color = Pal.MintPanel, fontSize = 11.sp, fontWeight = FontWeight.Bold,
                     modifier = Modifier.align(Alignment.TopEnd).padding(10.dp).clip(RoundedCornerShape(50))
                         .background(Color.Black.copy(alpha = 0.55f)).padding(horizontal = 10.dp, vertical = 5.dp),
                 )
@@ -204,7 +204,7 @@ private fun Shutter(progress: Float, onClick: () -> Unit, description: String) {
     ) {
         Canvas(Modifier.fillMaxSize()) {
             val sw = 6.dp.toPx()
-            drawCircle(Pal.Surface2, style = Stroke(sw))
+            drawCircle(Pal.Muted.copy(alpha = 0.4f), style = Stroke(sw))
             drawArc(
                 Pal.Mint, -90f, 360f * p, false, topLeft = Offset(sw / 2, sw / 2),
                 size = Size(size.width - sw, size.height - sw), style = Stroke(sw, cap = StrokeCap.Round),
