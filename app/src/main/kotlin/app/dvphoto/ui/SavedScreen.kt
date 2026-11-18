@@ -57,7 +57,7 @@ fun SavedScreen(
     ) {
         Spacer(Modifier.height(12.dp))
         Box(
-            Modifier.size(88.dp).scale(pop.value).clip(CircleShape).background(Pal.Mint),
+            Modifier.size(88.dp).scale(pop.value).clip(CircleShape).background(Pal.MintPanel),
             contentAlignment = Alignment.Center,
         ) { Icon(Icons.Default.Check, null, tint = Pal.Ink, modifier = Modifier.size(48.dp)) }
 
