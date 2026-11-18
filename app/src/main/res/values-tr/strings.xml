@@ -14,7 +14,7 @@
     <string name="action_retake">Yeniden çek</string>
     <string name="action_pick_other">Başka bir fotoğraf seç</string>
     <string name="action_another">Başka fotoğraf ekle</string>
-    <string name="home_tagline">DV Piyangosu kurallarına uygun fotoğraflar.</string>
+    <string name="home_tagline">Pasaport boyutunda fotoğraf çekin</string>
     <string name="home_take">Fotoğraf çek</string>
     <string name="home_take_sub">Canlı yönlendirme, otomatik çekim, filtre yok</string>
     <string name="home_upload">Mevcut fotoğrafı kontrol et</string>
