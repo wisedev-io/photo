@@ -80,3 +80,38 @@ jobs:
           name: dv-photo-unsigned-release-aab
           path: app/build/outputs/bundle/release/*.aab
           if-no-files-found: error
+
+      - name: Sign the Play upload bundle
+        id: sign
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          PLAY_UPLOAD_KEYSTORE_BASE64: ${{ secrets.PLAY_UPLOAD_KEYSTORE_BASE64 }}
+          PLAY_UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.PLAY_UPLOAD_KEYSTORE_PASSWORD }}
+          PLAY_UPLOAD_KEY_ALIAS: ${{ vars.PLAY_UPLOAD_KEY_ALIAS || 'upload' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "$PLAY_UPLOAD_KEYSTORE_BASE64" && -z "$PLAY_UPLOAD_KEYSTORE_PASSWORD" ]]; then
+            echo "::notice::Play upload signing is not configured. Only the unsigned bundle is available."
+            exit 0
+          fi
+          if [[ -z "$PLAY_UPLOAD_KEYSTORE_BASE64" || -z "$PLAY_UPLOAD_KEYSTORE_PASSWORD" ]]; then
+            echo "::error::Configure both Google Play upload signing secrets."
+            exit 1
+          fi
+
+          keystore="$(mktemp)"
+          trap 'rm -f "$keystore"' EXIT
+          printf '%s' "$PLAY_UPLOAD_KEYSTORE_BASE64" | base64 --decode > "$keystore"
+          jarsigner -keystore "$keystore" -storetype PKCS12 \
+            -storepass:env PLAY_UPLOAD_KEYSTORE_PASSWORD \
+            -signedjar "$RUNNER_TEMP/dv-photo-play.aab" \
+            app/build/outputs/bundle/release/app-release.aab "$PLAY_UPLOAD_KEY_ALIAS"
+          jarsigner -verify "$RUNNER_TEMP/dv-photo-play.aab"
+          echo "signed=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: steps.sign.outputs.signed == 'true'
+        with:
+          name: dv-photo-play-aab
+          path: ${{ runner.temp }}/dv-photo-play.aab
+          if-no-files-found: error
