@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "android",
+      "request": "launch",
+      "name": "Run and Debug DV Photo on Emulator",
+      "preLaunchTask": "Android: Build and start emulator",
+      "appSrcRoot": "${workspaceFolder}/app/src/main",
+      "apkFile": "${workspaceFolder}/app/build/outputs/apk/debug/app-debug.apk",
+      "launchActivity": "app.dvphoto.MainActivity",
+      "adbSocket": "localhost:5037",
+      "autoStartADB": false,
+      "staleBuild": "stop"
+    }
+  ]
+}

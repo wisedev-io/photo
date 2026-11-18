@@ -1,0 +1,14 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Android: Build and start emulator",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "${workspaceFolder}/tools/vscode-run-android.sh"
+      ],
+      "problemMatcher": []
+    }
+  ]
+}

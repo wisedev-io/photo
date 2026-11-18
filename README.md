@@ -93,6 +93,10 @@ Memory: live analysis reads only the camera's Y plane at ~6 fps (no per-frame bi
 ```
 ./gradlew :core:test :app:assembleDebug        # needs the Android SDK (CI job "android")
 
+# VS Code: install the recommended Android extension, then choose
+# "Run and Debug DV Photo on Emulator" in Run and Debug. If needed, the task
+# starts the first configured AVD without snapshot save/load and caps it at 2 GB RAM.
+
 # no Android SDK needed:
 python3 tools/check_resources.py               # keys, placeholders, locales
 python3 tools/test_check_resources.py          # tests of the checker
