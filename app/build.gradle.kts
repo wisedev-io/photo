@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "app.dvphoto"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "app.dvphoto.camera"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 2
         versionName = "0.2.0"
     }
