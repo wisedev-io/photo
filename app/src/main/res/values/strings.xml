@@ -18,7 +18,7 @@
     <string name="action_another">Add another photo</string>
 
     <!-- Home -->
-    <string name="home_tagline">Photos that pass the DV Lottery rules.</string>
+    <string name="home_tagline">Take passport-size photos</string>
     <string name="home_take">Take a photo</string>
     <string name="home_take_sub">Live guidance, auto-capture, no filters</string>
     <string name="home_upload">Check an existing photo</string>
